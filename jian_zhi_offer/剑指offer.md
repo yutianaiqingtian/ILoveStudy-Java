@@ -6,6 +6,94 @@
 
 # 剑指offer
 
+## Main5：从尾到头打印链表
+
+---
+
+2018/5/16 星期三
+
+> **题目描述**：输入个链表的头结点，从尾到头反过来打印出每个结点的值。 
+
+设计一个链表结点
+
+```java
+class ListNode<T> {
+    T val;
+    ListNode next = null;
+
+    ListNode(T val) {
+        this.val = val;
+    }
+}
+```
+
+利用堆栈可以很方便的实现这个目的
+
+``` java
+public ArrayList<Integer> printListFromTailToHead(ListNode listNode) {
+    Stack<Integer> stack = new Stack<>();
+    ListNode current = listNode;
+    while (current != null) {
+        stack.push(current.val);
+        current = current.next;
+    }
+    ArrayList<Integer> result = new ArrayList<>();
+    while (!stack.isEmpty()) {
+        result.add(stack.pop());
+    }
+    return result;
+}
+```
+
+
+
+## Main6 题目：重建二叉树
+
+> 题目描述：输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如：前序遍历序列｛ 1, 2, 4, 7, 3, 5, 6, 8｝和中序遍历序列｛4, 7, 2, 1, 5, 3,  8，6}，重建出下图所示的二叉树并输出它的头结点。 
+
+构建二叉树的结点类
+
+```java
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int x) {
+        val = x;
+    }
+}
+```
+
+构建二叉树
+
+```java
+public TreeNode reConstructBinaryTree(int[] pre, int[] in) {
+    return reConstructBinaryTree(pre, 0, pre.length - 1, in, 0, in.length - 1);
+}
+
+private TreeNode reConstructBinaryTree(int[] pre, int preStart, int preEnd, int[] in, int inStart, int inEnd) {
+    if (preStart > preEnd || inStart > inEnd) {
+        return null;
+    }
+    TreeNode root = new TreeNode(pre[preStart]);
+    for (int i = inStart; i <= inEnd; i++) {
+        if (root.val == in[i]) {
+            root.left = reConstructBinaryTree(pre, preStart + 1, preStart + i - inStart, in, inStart, i - 1);
+            root.right = reConstructBinaryTree(pre, preStart + 1 + i - inStart, preEnd, in, i + 1, inEnd);
+            break;
+        }
+    }
+    return root;
+}
+```
+
+
+
+
+
+
+
 ## 笔试题10：二进制中1的个数 
 
 > **题目描述：**输入一个整数，输出该数二进制表示中1的个数。其中负数用补码表示。 
