@@ -95,7 +95,7 @@ class MyStack<K> {
     public int length;
 
     public void push(K item) {
-        ListNode<K> node = new ListNode<K>();
+        ListNode<K> node = new ListNode<>();
         node.data = item;
         node.nextNode = head;
         head = node;
@@ -110,7 +110,6 @@ class MyStack<K> {
         head = head.nextNode;
         length--;
         return temp.data;
-
     }
 
     class ListNode<K> {

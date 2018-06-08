@@ -1,6 +1,8 @@
 package offer.jianzhi.chapter2;
 
 /**
+ * 统计二进制的个数
+ *
  * @author jhZhang
  * @date 2018/4/12
  */
@@ -8,7 +10,7 @@ public class BitCounter {
 
     public static void main(String[] args) {
         int n = 9;
-        System.out.println(numberOf1(n));
+        System.out.println(Integer.toBinaryString(n) + "\t" + numberOf1(n));
     }
 
     /**
@@ -22,6 +24,7 @@ public class BitCounter {
         int count = 0;
         int flag = 1;
         while (flag != 0) {
+//            System.out.println(Integer.toBinaryString(flag));
             if ((flag & n) != 0) count++;
             flag = flag << 1;
         }
