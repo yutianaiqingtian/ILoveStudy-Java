@@ -24,7 +24,7 @@
   ```
 
   解决方案可以[参考](https://www.jianshu.com/p/400dbf77f6cf)如下。修改github中 `settting->Emails` 中取消 *Block command line pushes that expose my email*前面的√标记。
-            
+
 
 # 如何配置Ubuntu和Github
 

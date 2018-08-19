@@ -504,3 +504,94 @@ Tips: ：你可以先考虑这个数组中只有一个数字只出现一次，�
 程序耗时
 
 > 运行时间：13ms </br> 占用内存：9660k
+
+### 面试题41：和为s的两个数字VS和为s的连续正数序列
+
+
+> 题目一：输入一个递增排序的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。如果有多对数字的和等于s，输出任意一对即可。
+
+例如输入数组{1、2、4、7、11、15}和数字15。由于4＋11＝15，因此输出4和11。
+
+解题思路：
+
+1. 首先定义两个指针，第一个指针指向数组的第一个（也是最小的）数字1，第二个指针指向数组的最后一个（也是最大的）数字15。
+2. 这两个数字的和16大于15，因此我们把第二个指针向前移动一个数字，让它指向11。
+3. 这个时候两个数字1与11的和是12，小于15。我们把第一个指针向后移动一个数字指向2。
+4. 此时两个数字2与11的和13，还是小于15。我们再一次向后移动第一个指针，让它指向数字4。数字4、11的和是15，正是我们期待的结果
+
+![Main41_1 查找两个数字和为15的过程](剑指offer.image/Main41_1 查找两个数字和为15的过程.png)
+
+基于上面思路编写的Java代码
+
+```java
+    static int[] findNumberWithSum(int[] arrays, int sum) {
+        if (arrays == null || arrays.length <= 2) {
+            return null;
+        }
+        int start = 0;
+        int end = arrays.length - 1;
+        while (start < end) {
+            int tmp = arrays[start] + arrays[end];
+            if (tmp == sum) {
+                return new int[]{arrays[start], arrays[end]};
+            } else if (tmp < sum) {
+                start++;
+            } else {
+                end--;
+            }
+        }
+        return null;
+    }
+```
+
+
+> 题目二： 和为s的连续正数序列
+
+[牛客网链接](https://www.nowcoder.com/practice/c451a3fd84b64cb19485dad758a55ebe?tpId=13&tqId=11194&rp=2&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+> 题目二：输入一个正数s，打印出所有和为s的连续正数序列（至少含有两个数）。例如输入15，由于1＋2＋3＋4＋5＝4＋5＋6＝7＋8＝15，所以结果打印出3个连续序列1～5、4～6和7～8。
+
+
+解题思路：参考前面的方法。
+
+1. 我们考虑用两个数 small 和 big
+分别表示序列的最小值和最大值。首先把 small 初始化为1, big 初始化为2；
+2. 当我们发现 small ~ big 之和小于总数 sum 的时候，我们将 end 向后进行累加操作，并向后移动；
+3. 当我们发现 small ~ big 之和大于 sum 总数的时候，我们将 small 剔除出连续子序列中，并向后移动。
+
+我们以 sum = 9 为例说明。整个过程如下图。
+
+![Main41_2 求取和为9的连续序列的过程](剑指offer.image/Main41_2 求取和为9的连续序列的过程.png)
+
+参考上面思路写下的Java代码：（可优化）
+
+```java
+    static ArrayList<ArrayList<Integer>> FindContinuousSequence(int sum) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList();
+        int small = 1;
+        int big = 2;
+        int tmp = small + big;
+        while (big < sum) {
+            if (tmp == sum) {
+                ArrayList<Integer> list = new ArrayList<>();
+                for (int i = small; i <= big; i++) {
+                    list.add(i);
+                }
+                result.add(list);
+                ++big;
+                tmp += big;
+            } else if (tmp > sum) {
+                tmp -= small;
+                ++small;
+            } else {
+                ++big;
+                tmp += big;
+            }
+        }
+        return result;
+    }
+```
+
+程序耗时
+
+> 运行时间：14ms </br> 占用内存：9552k
