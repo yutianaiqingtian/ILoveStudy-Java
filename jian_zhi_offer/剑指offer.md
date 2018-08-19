@@ -466,5 +466,41 @@ Tips: ：你可以先考虑这个数组中只有一个数字只出现一次，�
 **只有一个数字只出现一次的解法**
 
 ```java
-
+    /**
+     * 找出数组中只出现一次的数字,num1,num2分别为长度为1的数组。传出参数
+     * @param 
+     * @param num1
+     */
+    static void FindNumsAppearOnce(int[] array, int[] num1, int[] num2) {
+        for (int i = 0; i < array.length; i++) {
+            num1[0] ^= array[i];
+        }
+        // 根据 num1[0] 来将两个数组分为两个不同的小数组
+        int diffIndex = findFirstBitIs1(num1[0]);
+        int diffValue = 1 << diffIndex;
+        num1[0] = 0;
+        for (int i = 0; i < array.length; i++) {
+            if ((array[i] & diffValue) != diffValue) {
+                num1[0] ^= array[i];
+            } else {
+                num2[0] ^= array[i];
+            }
+        }
+    }
+    /**
+     * @param num 输入的数字
+     * @return 返回数字中二进制表示的第一个1的位置
+     */
+    static int findFirstBitIs1(int num) {
+        int indexBit = 0;
+        while ((num & 1) != 1) {
+            num = num >> 1;
+            indexBit++;
+        }
+        return indexBit;
+    }
 ```
+
+程序耗时
+
+> 运行时间：13ms </br> 占用内存：9660k
