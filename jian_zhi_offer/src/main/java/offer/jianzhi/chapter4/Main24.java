@@ -12,51 +12,51 @@ import java.util.Collections;
  * @date 2018/6/15
  */
 public class Main24 {
-    /**
-     * 把字符串拆分成两部分，第一部分不变，第二部分开始进行交换
-     *
-     * @param str
-     */
-    public ArrayList<String> Permutation(String str) {
-        ArrayList<String> result = new ArrayList<>();
-        if (str == null || str.length() <= 0) {
-            return result;
-        }
-        char[] chars = str.toCharArray();
-        Premutation(chars, 0, result);
-        Collections.sort(result);
-        return result;
-    }
+/**
+ * 把字符串拆分成两部分，第一部分不变，第二部分开始进行交换
+ *
+ * @param str
+ */
+public ArrayList<String> Permutation(String str) {
+ArrayList<String> result = new ArrayList<>();
+if (str == null || str.length() <= 0) {
+return result;
+}
+char[] chars = str.toCharArray();
+Premutation(chars, 0, result);
+Collections.sort(result);
+return result;
+}
 
-    private void Premutation(char[] chars, int offset, ArrayList<String> result) {
-        int len = chars.length;
-        if (offset < 0 || offset > len) {
-            return;
-        }
-        if (offset == len) {
-            String str = String.valueOf(chars);
-            if (!result.contains(str)) {
-                result.add(String.valueOf(chars));
-            }
-        }
-        for (int i = offset; i < len; i++) {
-            swap(chars, offset, i);
-            // 保存第offset元素，进行交换
-            Premutation(chars, offset + 1, result);
-            swap(chars, offset, i);
-        }
+private void Premutation(char[] chars, int offset, ArrayList<String> result) {
+int len = chars.length;
+if (offset < 0 || offset > len) {
+return;
+}
+if (offset == len) {
+String str = String.valueOf(chars);
+if (!result.contains(str)) {
+result.add(String.valueOf(chars));
+}
+}
+for (int i = offset; i < len; i++) {
+swap(chars, offset, i);
+// 保存第offset元素，进行交换
+Premutation(chars, offset + 1, result);
+swap(chars, offset, i);
+}
 
-    }
+}
 
-    public void swap(char[] chars, int i, int j) {
-        char tmp = chars[j];
-        chars[j] = chars[i];
-        chars[i] = tmp;
-    }
+public void swap(char[] chars, int i, int j) {
+char tmp = chars[j];
+chars[j] = chars[i];
+chars[i] = tmp;
+}
 
-    public static void main(String[] args) {
-        String str = "abc";
-        new Main24().Permutation(str);
-    }
+public static void main(String[] args) {
+String str = "abc";
+new Main24().Permutation(str);
+}
 
 }

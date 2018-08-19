@@ -10,32 +10,32 @@ import java.util.List;
  * @date 2018/4/3
  */
 public class Main5 {
-    Node head;
+Node head;
 
-    Main5() {
-        head = null;
-        head.next = null;
-    }
+Main5() {
+head = null;
+head.next = null;
+}
 
-    public static void main(String[] args) {
-    }
+public static void main(String[] args) {
+}
 
-    public List<String> printFromEndToStart() {
-        if (head == null) {
-            return null;
-        }
-        Node current = head;
-        List<String> nodes = new ArrayList<>();
-        nodes.add(head.date);
-        while (current.next != null) {
-            nodes.add(current.date);
-            current = current.next;
-        }
-        return nodes;
-    }
+public List<String> printFromEndToStart() {
+if (head == null) {
+return null;
+}
+Node current = head;
+List<String> nodes = new ArrayList<>();
+nodes.add(head.date);
+while (current.next != null) {
+nodes.add(current.date);
+current = current.next;
+}
+return nodes;
+}
 
-    class Node {
-        String date;
-        Node next;
-    }
+class Node {
+String date;
+Node next;
+}
 }

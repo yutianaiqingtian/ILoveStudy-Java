@@ -6,9 +6,9 @@ import static org.junit.Assert.*;
 
 public class Main23Test {
 
-    @Test
-    public void testPrintFromTopToBottom() {
-        TreeNode root = null;
-        new Main23().PrintFromTopToBottom(root);
-    }
+@Test
+public void testPrintFromTopToBottom() {
+TreeNode root = null;
+new Main23().PrintFromTopToBottom(root);
+}
 }

@@ -9,19 +9,19 @@ package offer.jianzhi.chapter2;
  * @date 2018/5/14
  */
 public class Main3 {
-    public boolean Find(int target, int[][] array) {
-        int rolCount = array.length;
-        int colCount = array[0].length;
-        int i, j;
-        for (i = rolCount - 1, j = 0; i >= 0 && j < colCount; ) {
-            if (array[i][j] == target) {
-                return true;
-            } else if (array[i][j] > target) {
-                i--;
-            } else if (array[i][j] < target) {
-                j++;
-            }
-        }
-        return false;
-    }
+public boolean Find(int target, int[][] array) {
+int rolCount = array.length;
+int colCount = array[0].length;
+int i, j;
+for (i = rolCount - 1, j = 0; i >= 0 && j < colCount; ) {
+if (array[i][j] == target) {
+return true;
+} else if (array[i][j] > target) {
+i--;
+} else if (array[i][j] < target) {
+j++;
+}
+}
+return false;
+}
 }

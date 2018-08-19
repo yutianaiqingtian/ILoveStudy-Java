@@ -7,10 +7,10 @@ package offer.jianzhi.chapter2;
  * @date 2018/5/18
  */
 public class Main10 {
-    public int JumpFloorII(int target) {
-        if (target <= 0) {
-            return 0;
-        }
-        return (int) Math.pow(2, target - 1);
-    }
+public int JumpFloorII(int target) {
+if (target <= 0) {
+return 0;
+}
+return (int) Math.pow(2, target - 1);
+}
 }

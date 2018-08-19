@@ -10,7 +10,7 @@ public class Main22 {
 
     public static void main(String[] args) {
         int[] a = new int[]{1, 2, 3, 4, 5};
-//        int[] b = new int[]{4, 5, 3, 2, 1};
+//int[] b = new int[]{4, 5, 3, 2, 1};
         int[] b = new int[]{4, 3, 5, 1, 2};
         System.out.println(new Main22().IsPopOrder(a, b));
         System.out.println(new Main22().isRight(a, b));
@@ -20,12 +20,12 @@ public class Main22 {
         if (pPop.length <= 0 || pPop.length <= 0) {
             return false;
         }
-        // 出栈顺序
+// 出栈顺序
         Stack<Integer> popOrder = new Stack<>();
         for (int i = pPop.length - 1; i >= 0; i--) {
             popOrder.push(pPop[i]);
         }
-        // 入栈顺序
+// 入栈顺序
         Stack<Integer> pushOrder = new Stack<>();
         for (int i = 0; i < pPush.length; i++) {
             pushOrder.push(pPush[i]);
@@ -79,16 +79,16 @@ public class Main22 {
         int index = 0;
         Stack<Integer> stack = new Stack<>();
         for (int i = 0; i < line2.length && index < line1.length; ) {
-            // ①
+// ①
             if (!stack.isEmpty() && stack.peek() == line2[i]) {
                 stack.pop();
                 i++;
             } else {
-                // ②
+// ②
                 stack.push(line1[index++]);
             }
         }
-        // ③
+// ③
         if (index == line1.length && stack.isEmpty()) {
             return true;
         }
