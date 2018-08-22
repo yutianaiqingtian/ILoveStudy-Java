@@ -507,6 +507,7 @@ Tips: ：你可以先考虑这个数组中只有一个数字只出现一次，�
 
 ### 面试题41：和为s的两个数字VS和为s的连续正数序列
 
+[牛客网连接](https://www.nowcoder.com/practice/390da4f7a00f44bea7c2f3d19491311b?tpId=13&tqId=11195&rp=2&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
 
 > 题目一：输入一个递增排序的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。如果有多对数字的和等于s，输出任意一对即可。
 
@@ -524,23 +525,26 @@ Tips: ：你可以先考虑这个数组中只有一个数字只出现一次，�
 基于上面思路编写的Java代码
 
 ```java
-    static int[] findNumberWithSum(int[] arrays, int sum) {
-        if (arrays == null || arrays.length <= 2) {
-            return null;
+    public ArrayList<Integer> FindNumbersWithSum(int[] array, int sum) {
+        ArrayList list = new ArrayList();
+        if (array == null || array.length <= 2) {
+            return list;
         }
         int start = 0;
-        int end = arrays.length - 1;
+        int end = array.length - 1;
         while (start < end) {
-            int tmp = arrays[start] + arrays[end];
+            int tmp = array[start] + array[end];
             if (tmp == sum) {
-                return new int[]{arrays[start], arrays[end]};
+                list.add(array[start]);
+                list.add(array[end]);
+                break;
             } else if (tmp < sum) {
                 start++;
             } else {
                 end--;
             }
         }
-        return null;
+        return list;
     }
 ```
 
@@ -595,3 +599,100 @@ Tips: ：你可以先考虑这个数组中只有一个数字只出现一次，�
 程序耗时
 
 > 运行时间：14ms </br> 占用内存：9552k
+
+
+### 面试题42：翻转单词顺序 VS 左旋转字符串
+
+
+[牛客网链接](https://www.nowcoder.com/practice/3194a4f4cf814f63919d0790578d51f3?tpId=13&tqId=11197&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+> 题目一：输入一个英文句子，翻转句子中单词的顺序，但单词内字符的顺序不变。为简单起见，标点符号和普通字母一样处理。例如输入字符串"I am a student. "，则输出"student. a am I"。
+
+解题思路：
+
+1. 先将整个句子都反转;
+2. 将每个单词反转。
+
+下面是将输入字符串反转的。
+
+解题思路：
+
+先定义个函数，用来实现字符串的反转。
+
+```java
+    static void swapArray(char[] chars, int start, int end) {
+        if (start < 0 || end > chars.length || end < start) {
+            return;
+        }
+        int count = (end - start) >> 1;
+        for (int i = 0; i <= count; i++) {
+            char tmp = chars[start + i];
+            chars[start + i] = chars[end - i];
+            chars[end - i] = tmp;
+        }
+    }
+
+```
+
+下面的方法通过判断为**空格**或者**最后一个元素**来反转每个单词
+
+```java
+    public String ReverseSentence(String str) {
+        if (str == null || str.length() <= 0) {
+            return "";
+        }
+        char[] chars = str.toCharArray();
+        int len = chars.length;
+        swapArray(chars, 0, len - 1);
+
+        for (int i = 0, start = 0; i <= len - 1; i++) {
+            if (chars[i] == ' ') {
+                swapArray(chars, start, i - 1);
+                start = i + 1;
+            }
+            if (i == len - 1) {
+                swapArray(chars, start, len - 1);
+            }
+        }
+        return String.valueOf(chars);
+    }
+```
+
+运行效率：
+
+> 运行时间：19ms </br> 占用内存：9572k
+
+#### 左旋转字符串
+
+> 题目二：字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。请定义一个函数实现字符串左旋转操作的功能。比如输入字符串"abcdefg"和数字2，该函数将返回左旋转2位得到的结果"cdefgab"。
+
+[牛客网链接](https://www.nowcoder.com/practice/12d959b108cb42b1ab72cef4d36af5ec?tpId=13&tqId=11196&rp=2&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+同样的基于上面的思路，采用旋转来考虑。
+
+```java
+    /**
+     * 左旋转字符串
+     *
+     * @param str 原始字符串
+     * @param n   旋转的位置
+     * @return
+     */
+    public String LeftRotateString(String str, int n) {
+        if (str == null || str.length() <= 0 || n > str.length()) {
+            return "";
+        }
+        char[] chars = str.toCharArray();
+        int len = chars.length;
+        swapArray(chars, 0, len - 1);
+        swapArray(chars, 0, len - n - 1);
+        swapArray(chars, len - n, len - 1);
+        return String.valueOf(chars);
+    }
+```
+
+思考：当然其实前面两个字符移动到字符串的末尾，通过其它的方式也可以做，但是通过旋转，就不需要额外的空间开销
+
+运行效率:
+
+> 运行时间：21ms </br> 占用内存：9680k

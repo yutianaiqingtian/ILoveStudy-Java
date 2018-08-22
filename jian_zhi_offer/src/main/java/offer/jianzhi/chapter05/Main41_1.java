@@ -1,5 +1,7 @@
 package offer.jianzhi.chapter05;
 
+import java.util.ArrayList;
+
 /**
  * 和为s的两个数字
  *
@@ -25,5 +27,27 @@ public class Main41_1 {
             }
         }
         return null;
+    }
+
+    public ArrayList<Integer> FindNumbersWithSum(int[] array, int sum) {
+        ArrayList list = new ArrayList();
+        if (array == null || array.length <= 2) {
+            return list;
+        }
+        int start = 0;
+        int end = array.length - 1;
+        while (start < end) {
+            int tmp = array[start] + array[end];
+            if (tmp == sum) {
+                list.add(array[start]);
+                list.add(array[end]);
+                break;
+            } else if (tmp < sum) {
+                start++;
+            } else {
+                end--;
+            }
+        }
+        return list;
     }
 }
