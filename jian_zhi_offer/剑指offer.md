@@ -825,3 +825,59 @@ Arrays.toString(pProbabilities[1 - flag]) = "[0, 0, 0, 0, 1, 4, 10, 20, 35, 56, 
 
 ```
 
+### 面试题44：扑克牌的顺子
+
+[牛客网链接](https://www.nowcoder.com/practice/762836f4d43d43ca9deb273b3de8e1f4?tpId=13&tqId=11198&tPage=3&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+> 题目：从扑克牌中随机抽5张牌，判断是不是一个顺子，即这5张牌是不是连续的。2～10为数字本身，A为1，J为11，Q为12，K为13，而大、小王可以看成任意数字。
+
+解题思路：我们将一副牌进行抽象，将大小王用0表示，可以描述任意字符。
+
+1. 将5个元素的数字进行排序;
+2. 统计其中不连续的个数；
+3. 统计其中0的个数，如果 0 的个数小于前面的不连续个数则不连续，否则连续。
+4. 最后，我们还需要**注意**一点：如果数组中的非0数字重复出现，则该数组不是连续的。
+
+基于上面的思路写下如下代码：
+
+```java
+    static boolean isContinuous(int[] numbers) {
+        if (numbers == null || numbers.length <= 0) {
+            return false;
+        }
+        Arrays.sort(numbers);
+        int gap = 0;
+        int zeroTimes = 0;
+        for (int i = 0; i < numbers.length - 1; i++) {
+            if (numbers[i] == 0) {
+                zeroTimes++;
+                continue;
+            }
+            // 如果为顺子，直接返回false
+            if (numbers[i + 1] == numbers[i]) {
+                return false;
+            } else if (numbers[i + 1] - numbers[i] != 1) {
+                gap += numbers[i + 1] - numbers[i] - 1;
+            }
+        }
+        return zeroTimes >= gap ? true : false;
+    }
+```
+
+运行效率：
+
+> 运行时间：15ms </br> 占用内存：9296k
+
+
+### 面试题45：圆圈中最后剩下的数字
+
+> 题目：0,1,…,n－1这n个数字排成一个圆圈，从数字0开始每次从这个圆圈里删除第m个数字。求出这个圆圈里剩下的最后一个数字。
+
+例如，0、1、2、3、4这5个数字组成一个圆圈（如图6.2所示），从数字0开始每次删除第3个数字，则删除的前四个数字依次是2、0、4、1，因此最后剩下的数字是3。
+
+![由0－4这5个数字组成的圆圈](剑指offer.image/由0－4这5个数字组成的圆圈.png)
+
+本题就是有名的**约瑟夫（Josephuse）环**问题。我们介绍两种方法：一种方法是用**环形链表**模拟圆圈的经典解法，第二种方法是分析每次被删除的**数字的规律**并直接计算出圆圈中最后剩下的数字。
+
+#### 经典的解法，用环形链表模拟圆圈
+
