@@ -696,3 +696,132 @@ Tips: ：你可以先考虑这个数组中只有一个数字只出现一次，�
 运行效率:
 
 > 运行时间：21ms </br> 占用内存：9680k
+
+### 面试题43：n个骰子的点数
+
+> 题目：把n个骰子扔在地上，所有骰子朝上一面的点数之和为s。输入n，打印出s的所有可能的值出现的概率。
+
+玩过麻将的人都知道，骰子一共6个面，每个面上都有一个点数，对应的是1～6之间的一个数字。所以n个骰子的点数和的最小值为n，最大值为6n。另外根据排列组合的知识，我们还知道n个骰子的所有点数的排列数为6n。要解决这个问题，我们需要先统计出每一个点数出现的次数，然后把每一个点数出现的次数除以6n，就能求出每个点数出现的概率。
+
+
+#### 基于递归的解法
+
+解题思路： 
+
+1. 先把n个骰子分为两堆：第一堆只有一个，另一个有n－1个。
+2. 单独的那一个有可能出现从1到6的点数。我们需要计算从1到6的每一种点数和剩下的n－1个骰子来计算点数和。
+3. 接下来把剩下的n－1个骰子还是分成两堆，第一堆只有一个，第二堆有n－2个。
+4. 我们把上一轮那个单独骰子的点数和这一轮单独骰子的点数相加，再和剩下的n－2个骰子来计算点数和。
+
+基于上面思路的代码：
+
+```java
+    /**
+     * 最大的点数
+     */
+    static final int gMaxValue = 6;
+
+    /**
+     * @param n         循环的次数
+     * @param preSumsum 前一个值
+     * @param s         预期值
+     * @param times     传递次数
+     */
+    static void sumCountNumber(int n, int preSumsum, int s, int[] times) {
+        if (n == 0 && preSumsum == s) {
+            times[0] += 1;
+            return;
+        } else if (n <= 0) {
+            return;
+        }
+        for (int i = 1; i <= gMaxValue; i++) {
+            sumCountNumber(n - 1, preSumsum + i, s, times);
+        }
+    }
+
+    static String properties(int n, int s) {
+        double prop = 0.0;
+        int min = n * 1;
+        int max = n * gMaxValue;
+        if (n <= 0 || s < min || s > max) {
+            return "0/0";
+        }
+        int j = n;
+        int maxTimes = gMaxValue;
+        while (j-- > 1) {
+            maxTimes *= gMaxValue;
+        }
+        int[] times = new int[]{0};
+        sumCountNumber(n, 0, s, times);
+        return String.format("%s/%s", times[0], maxTimes);
+    }
+```
+
+#### 解法二：基于循环求骰子点数，时间性能好
+
+可以换一种思路来解决这个问题。我们可以考虑用两个数组来**存储骰子点数**的**每一个总数出现的次数**。
+
+解题思路：
+
+1. 在一次循环中，第一个数组中的第n个数字表示骰子和为n出现的次数。
+2. 在下一循环中，我们加上一个新的骰子，此时和为n的骰子出现的次数应该等于上一次循环中骰子点数和为n－1、n－2、n－3、n－4、n－5与n－6的次数的总和，所以我们把另一个数组的第n个数字设为前一个数组对应的第n－1、n－2、n－3、n－4、n－5与n－6之和。
+
+参考代码：
+
+```java
+    static void PrintProbability(int number) {
+        if (number < 1) {
+            return;
+        }
+        int[][] pProbabilities = new int[2][];
+        pProbabilities[0] = new int[g_maxValue * number + 1];
+        pProbabilities[1] = new int[g_maxValue * number + 1];
+        for (int i = 0; i < g_maxValue * number + 1; ++i) {
+            pProbabilities[0][i] = 0;
+            pProbabilities[1][i] = 0;
+        }
+
+        int flag = 0;
+        // 初始化为1的情况
+        for (int i = 1; i <= g_maxValue; ++i) {
+            pProbabilities[flag][i] = 1;
+        }
+
+        for (int k = 2; k <= number; ++k) {
+            for (int i = 0; i < k; ++i) {
+                pProbabilities[1 - flag][i] = 0;
+            }
+            for (int i = k; i <= g_maxValue * k; ++i) {
+                pProbabilities[1 - flag][i] = 0;
+                // f(n) = f(n-1) + f(n-2) + f(n-3) + f(n-4) ...
+                for (int j = 1; j <= i && j <= g_maxValue; ++j) {
+                    pProbabilities[1 - flag][i] += pProbabilities[flag][i - j];
+                }
+            }
+            flag = 1 - flag;
+        }
+
+        int total = (int) Math.pow(g_maxValue, number);
+        for (int i = number; i <= g_maxValue * number; ++i) {
+            System.out.printf("%s/%s\n", pProbabilities[flag][i], total);
+        }
+    }
+```
+
+当number=4 的时候，与进行调试信息。
+
+```
+Arrays.toString(pProbabilities[flag]) = "[0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]"
+Arrays.toString(pProbabilities[1 - flag]) = "[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]"
+
+Arrays.toString(pProbabilities[flag]) = "[0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]"
+Arrays.toString(pProbabilities[1 - flag]) = "[0, 0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]"
+
+Arrays.toString(pProbabilities[flag]) = "[0, 0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]"
+Arrays.toString(pProbabilities[1 - flag]) = "[0, 0, 0, 1, 3, 6, 10, 15, 21, 25, 27, 27, 25, 21, 15, 10, 6, 3, 1, 0, 0, 0, 0, 0, 0]"
+
+Arrays.toString(pProbabilities[flag]) = "[0, 0, 0, 1, 3, 6, 10, 15, 21, 25, 27, 27, 25, 21, 15, 10, 6, 3, 1, 0, 0, 0, 0, 0, 0]"
+Arrays.toString(pProbabilities[1 - flag]) = "[0, 0, 0, 0, 1, 4, 10, 20, 35, 56, 80, 104, 125, 140, 146, 140, 125, 104, 80, 56, 35, 20, 10, 4, 1]"
+
+```
+
