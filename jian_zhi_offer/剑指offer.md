@@ -916,7 +916,7 @@ Arrays.toString(pProbabilities[1 - flag]) = "[0, 0, 0, 0, 1, 4, 10, 20, 35, 56, 
 
 解题思路：约瑟夫环，圆圈长度为 n 的解可以看成长度为 n-1 的解再加上报数的长度 m。因为是圆圈，所以最后需要对 n 取余。
 
-![约瑟夫环推导公司](剑指offer.image/约瑟夫环推导公司.png)
+![约瑟夫环推导公式](剑指offer.image/约瑟夫环推导公司.png)
 
 
 ```java
@@ -982,3 +982,67 @@ Arrays.toString(pProbabilities[1 - flag]) = "[0, 0, 0, 0, 1, 4, 10, 20, 35, 56, 
 运行时间：19ms
 占用内存：9428k
 ```
+
+### 面试题47：不用加减乘除做加法
+
+[牛客网链接](https://www.nowcoder.com/practice/59ac416b4b944300b617d4f7f111b215?tpId=13&tqId=11201&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+题目描述：
+
+> 题目：写一个函数，求两个整数之和，要求在函数体内不得使用＋、－、×、÷四则运算符号。
+
+解题思路：
+
+如果学过数电的话，就会有加法器的概念。那么通过位运算来模拟加法就不会显得很困难。模拟a、b两个数的加法计算如下。
+
+1. 将 a 与 b 进行异或运算，这就表示不做进位运算时， a 与 b 的和;
+2. 将 a 与 b 进行与运行，并且进行左移一位，就表示 a 与 b 的进位情况;
+3. 将 1、 2 两步的和进行 “相加”（重复的计算1、2两步）， 直到 a 和 b不产生进位。
+
+参考代码：
+
+```java
+    static int Add(int num1, int num2) {
+        int xor = num1 ^ num2;
+        int and = (num1 & num2) << 1;
+        return and != 0 ? Add(xor, and) : xor;
+    }
+```
+
+或者基于循环
+
+```java
+    static int AddByWhile(int a, int b) {
+        int xor, and;
+        do {
+            xor = a ^ b;
+            and = (a & b) << 1;
+
+            a = xor;
+            b = and;
+        } while (and != 0);
+        return xor;
+    }
+```
+运行效率：
+
+```
+运行时间：15ms
+占用内存：9272k
+```
+
+#### 相关问题
+
+不使用新的变量，交换两个变量的值。比如有两个变量 a 和 b，我们希望交换它们的值。有两种不同(加减法或者异或的方法)的办法。
+
+![不使用新的变量交换两个变量的值](剑指offer.image/不使用新的变量交换两个变量的值.png)
+
+
+### 把字符串转换成整数
+
+[牛客网链接](https://www.nowcoder.com/practice/1277c681251b4372bdef344468e4f26e?tpId=13&tqId=11202&rp=3&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+
+题目描述：
+
+> 将一个字符串转换成一个整数(实现Integer.valueOf(string)的功能，但是string不符合数字要求时返回0)，要求不能使用字符串转换整数的库函数。 数值为0或者字符串不是一个合法的数值则返回0。
+
