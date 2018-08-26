@@ -871,6 +871,8 @@ Arrays.toString(pProbabilities[1 - flag]) = "[0, 0, 0, 0, 1, 4, 10, 20, 35, 56, 
 
 ### 面试题45：圆圈中最后剩下的数字
 
+[牛客网链接](https://www.nowcoder.com/practice/f78a359491e64a50bce2d89cff857eb6?tpId=13&tqId=11199&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
 > 题目：0,1,…,n－1这n个数字排成一个圆圈，从数字0开始每次从这个圆圈里删除第m个数字。求出这个圆圈里剩下的最后一个数字。
 
 例如，0、1、2、3、4这5个数字组成一个圆圈（如图6.2所示），从数字0开始每次删除第3个数字，则删除的前四个数字依次是2、0、4、1，因此最后剩下的数字是3。
@@ -881,3 +883,78 @@ Arrays.toString(pProbabilities[1 - flag]) = "[0, 0, 0, 0, 1, 4, 10, 20, 35, 56, 
 
 #### 经典的解法，用环形链表模拟圆圈
 
+我们直接使用Java中的 ListedList 来模拟链表。
+
+```java
+    static int removeList(LinkedList lists, int start, int m) {
+        int index = start + m;
+        while (index > lists.size()) {
+            index = index - lists.size();
+        }
+        index = index - 1;
+        lists.remove(index);
+        return index < lists.size() ? index : 0;
+    }
+
+    static int LastRemaining_Solution(int n, int m) {
+        if (n <= 0 || m <= 0) {
+            return -1;
+        }
+        LinkedList<Integer> lists = new LinkedList();
+        for (int i = 0; i < n; i++) {
+            lists.add(i);
+        }
+        int start = 0;
+        while (lists.size() > 1) {
+            start = removeList(lists, start, m);
+        }
+        return lists.get(0);
+    }
+```
+
+#### 基于循环的解法
+
+解题思路：约瑟夫环，圆圈长度为 n 的解可以看成长度为 n-1 的解再加上报数的长度 m。因为是圆圈，所以最后需要对 n 取余。
+
+![约瑟夫环推导公司](剑指offer.image/约瑟夫环推导公司.png)
+
+
+```java
+	public int LastRemaining_Solution(int n, int m) {
+	    if (n == 0)     /* 特殊输入的处理 */
+	        return -1;
+	    if (n == 1)     /* 递归返回条件 */
+	        return 0;
+	    return (LastRemaining_Solution(n - 1, m) + m) % n;
+	}
+```
+
+或者通过循环来进行
+
+```java
+    static int LastRemaining_Solution(int n, int m) {
+        if (n < 1 || m < 1) {
+            return -1;
+        }
+        int last = 0;
+        for (int i = 2; i <= n; i++) {
+            last = (last + m) % i;
+        }
+        return last;
+    }
+```
+
+运行效率为
+
+```
+运行时间：16ms
+占用内存：9328k
+```
+
+### 求1+2+3+...+n
+
+[牛客网链接](https://www.nowcoder.com/practice/7a0da8fc483247ff8800059e12d7caf1?tpId=13&tqId=11200&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+题目描述：
+
+> 题目：求1＋2＋…＋n，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。
