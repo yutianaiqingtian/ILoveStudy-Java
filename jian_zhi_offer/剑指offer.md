@@ -1046,3 +1046,42 @@ Arrays.toString(pProbabilities[1 - flag]) = "[0, 0, 0, 0, 1, 4, 10, 20, 35, 56, 
 
 > 将一个字符串转换成一个整数(实现Integer.valueOf(string)的功能，但是string不符合数字要求时返回0)，要求不能使用字符串转换整数的库函数。 数值为0或者字符串不是一个合法的数值则返回0。
 
+解题思路：
+
+1. 将字符串转换为char数组
+2. 从数组的最后一位依次的累加
+3. 判断首位元素是否为“+”或者“-”元素
+
+参考代码：
+
+```java
+    static int StrToInt(String str) {
+        if (str == null || str.length() <= 0) {
+            return 0;
+        }
+        int sum = 0;
+        char[] chars = str.trim().toCharArray();
+        int n = chars.length - 1;
+        int times = 1;
+        while (n >= 0 && chars[n] >= '0' && chars[n] <= '9') {
+            sum += times * (chars[n] - '0');
+            times *= 10;
+            n--;
+        }
+        if (n == -1) {
+            return sum;
+        } else if (n == 0 && chars[0] == '+') {
+            return sum;
+        } else if (n == 0 && chars[0] == '-') {
+            return -sum;
+        }
+        return 0;
+    }
+```
+
+程序耗时：
+
+```
+运行时间：9ms
+占用内存：9300k
+```
