@@ -958,3 +958,27 @@ Arrays.toString(pProbabilities[1 - flag]) = "[0, 0, 0, 0, 1, 4, 10, 20, 35, 56, 
 题目描述：
 
 > 题目：求1＋2＋…＋n，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。
+
+
+解题思路：
+
+1. 不允许使用循环可以使用递归来代替
+2. 不允许使用判断可以使用 && 的短路特性来代替
+
+参考代码：
+
+```java
+    public int Sum_Solution(int n) {
+        int ans = n;
+        boolean b = ans != 0 && (ans = n + Sum_Solution(n - 1)) != 0;
+        return ans;
+    }
+```
+发现Java中不能自动的转换为Boolean型，所以增加了一些冗余代码。
+
+运行效率：
+
+```
+运行时间：19ms
+占用内存：9428k
+```
