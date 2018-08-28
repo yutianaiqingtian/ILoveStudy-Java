@@ -1278,17 +1278,45 @@ PS：为啥是最低，因为如果两个结点在同一个树里面，只要不
 
 题目描述：
 
-> 给定一个数组A[0,1,...,n-1],请构建一个数组B[0,1,...,n-1],其中B中的元素 $B[i]=A[0]*A[1]*...*A[i-1]*A[i+1]*...*A[n-1]$ 。不能使用除法。	
+> 给定一个数组A[0,1,...,n-1],请构建一个数组B[0,1,...,n-1],其中B中的元素 B[i]=A[0]\*A[1]\*...\*A[i-1]\*A[i+1]\*...\*A[n-1] 。不能使用除法。	
+
+解题思路：我们可以把 B[i] 看成是左右两部分的乘积。
+
+![B[i]的值可以看作矩阵中每行的乘积](剑指offer.image/B[i]的值可以看作矩阵中每行的乘积.png)
 
 参考代码：
 
 ```java
-code
+    public int[] multiply(int[] A) {
+        if (A == null || A.length <= 0) {
+            return null;
+        }
+        int len = A.length;
+
+        int[] left = new int[len];
+        left[0] = 1;
+        for (int i = 1; i < A.length; i++) {
+            left[i] = left[i - 1] * A[i-1];
+        }
+
+        int[] right = new int[len];
+        right[A.length - 1] = 1;
+        for (int i = A.length - 2; i >= 0; i--) {
+            right[i] = right[i + 1] * A[i + 1];
+        }
+
+        int[] B = new int[len];
+        for (int i = 0; i < A.length; i++) {
+            B[i] = left[i] * right[i];
+        }
+        return B;
+    }
 ```
 
 运行效率
 
 ```
-
+运行时间：18ms
+占用内存：9348k
 ```
 
