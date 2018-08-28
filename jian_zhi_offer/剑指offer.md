@@ -1085,3 +1085,210 @@ Arrays.toString(pProbabilities[1 - flag]) = "[0, 0, 0, 0, 1, 4, 10, 20, 35, 56, 
 运行时间：9ms
 占用内存：9300k
 ```
+
+### 案例一：（面试题49）把字符串转换成整数
+
+[牛客网链接](https://www.nowcoder.com/practice/1277c681251b4372bdef344468e4f26e?tpId=13&tqId=11202&tPage=3&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+参考代码：
+
+```java
+    static int StrToInt(String str) {
+        if (str == null || str.length() <= 0) {
+            return 0;
+        }
+        int sum = 0;
+        char[] chars = str.trim().toCharArray();
+        int n = chars.length - 1;
+        int times = 1;
+        while (n >= 0 && chars[n] >= '0' && chars[n] <= '9') {
+            sum += times * (chars[n] - '0');
+            times *= 10;
+            n--;
+        }
+        if (n == -1) {
+            return sum;
+        } else if (n == 0 && chars[0] == '+') {
+            return sum;
+        } else if (n == 0 && chars[0] == '-') {
+            return -sum;
+        }
+        return 0;
+    }
+```
+
+### 案例二：（面试题50）树中两个结点的最低公共祖先
+
+里面很多问题都描述的很模糊，就如这里。
+
+如果这个树是一个二叉查找树，我们可以知道，该二叉查找树是排序后的。同一个结点的左子树小于右子树。所以，从根结点出发，依次遍历，找出第一个结点，能够让输入的两个结点的值介于两者之间，那么这个结点就是两个结点的最低公共祖先。
+
+![二叉查找树](https://github.com/CyC2018/CS-Notes/blob/master/pics/293d2af9-de1d-403e-bed0-85d029383528.png)
+
+PS：为啥是最低，因为如果两个结点在同一个树里面，只要不是根结点，那么根结点都将会是着两个结点的最低祖先。
+
+```java
+	public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+		if(root==null){
+			return root;
+		}
+		// 如果两个结点值都小于根结点，则往左子树查找
+		if(root.val > p.val && root.val > q.val){
+			return lowestCommonAncestor(root.left, p, q);
+		}
+		if(root.val < p.val && root.val < q.val){
+			return lowestCommonAncestor(root.right, p, q);
+		}
+		return root;
+	}
+```
+
+如果这个树就是一个普通的多叉树，但是每个结点保留了指向父结点的指针pParent。那么这道题就转换成了求两个链表的第一个公共子结点。
+
+![树中的结点有指向父结点的指针，用虚线箭头表示](剑指offer.image/树中的结点有指向父结点的指针，用虚线箭头表示.png)
+
+```java
+	public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+		if(root==null){
+			return root;
+		}
+		TreeNode pHead = p;
+		TreeNode qHead = q;
+	
+		// 获得p链表的长度
+		int pLength = 0;
+		while(p!=root){
+			p = p.parent;
+			pLength++;
+		}
+		p = pHead;
+
+		// 获得q链表的长度
+		int qLength = 0;
+		while(q!=root){
+			q = q.parent;
+			qLength++;
+		}
+		q = qHead;
+
+		// 长的链表先走差值步数
+		if(qLength>=pLength){
+			int diff = qLength - pLength;
+			while(diff-- > 0){
+				q = q.parent;
+			}
+		}else{
+			int diff = pLength - qLength;
+			while(diff-- > 0){
+				p = p.parent;
+			}
+		}
+
+		while(p!=null && q!=null && p!=q){
+			p = p.parent;
+			q = q.parent;
+		}
+		return p == q ? p : null;
+	}
+```
+
+如果就是普通的树呢？没有任何的其它条件
+
+![一棵普通的树，树中的结点没有指向父结点的指针](剑指offer.image/一棵普通的树，树中的结点没有指向父结点的指针.png)
+
+解题思路： 新建两个链表分别保存从根结点到输入的两个结点的路径，然后把问题转换成两个链表的最后公共结点。
+
+我们首先得到一条从根结点到树中某一结点的路径，这就要求在遍历的时候，有一个辅助内存来保存路径。（这里我们假设查找F和H两个结点的最低公共祖先）比如我们用前序遍历的方法来得到从根结点到H的路径的过程是这样的：
+
+1. 遍历到A，把A存放到路径中去，路径中只有一个结点A；
+2. 遍历到B，把B存到路径中去，此时路径为A->B；
+3. 遍历到D，把D存放到路径中去，此时路径为A->B->D；
+4. 遍历到F，把F存放到路径中去，此时路径为A->B->D->F；
+5. F已经没有子结点了，因此这条路径不可能到达结点H。把F从路径中删除，变成A->B->D；
+6. 遍历G。和结点F一样，这条路径也不能到达H。遍历完G之后，路径仍然是A->B->D；
+7. 由于D的所有子结点都遍历过了，不可能到达结点H，因此D不在从A到H的路径中，把D从路径中删除，变成A->B；
+8. 遍历E，把E加入到路径中，此时路径变成A->B->E，
+9. 遍历H，已经到达目标结点，**A->B->E就是从根结点开始到达H必须经过的路径**。
+
+找出上面的两条路径之后，我们求出两个路径最后的公共子结点。
+
+参考代码：略
+
+上面算法的运行效率： 为了得到从根结点开始到输入的两个结点的两条路径，需要遍历两次树，每遍历一次的时间复杂度是O（n）。得到的两条路径的长度在最差情况时是O（n），通常情况下两条路径的长度是O（logn）。
+
+同样上面的思路，不使用辅助内存，则可以考虑如下。
+
+在左右子树中查找是否存在 p 或者 q，如果 p 和 q 分别在两个子树中，那么就说明根节点就是最低公共祖先。
+
+参考代码：
+
+```java
+	public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+	    if (root == null || root == p || root == q)
+	        return root;
+	    TreeNode left = lowestCommonAncestor(root.left, p, q);
+	    TreeNode right = lowestCommonAncestor(root.right, p, q);
+	    return left == null ? right : right == null ? left : root;
+	}
+```
+
+
+### 数组中重复的数字
+
+[牛客网链接](https://www.nowcoder.com/practice/623a5ac0ea5b4e5f95552655361ae0a8?tpId=13&tqId=11203&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+题目描述：
+
+> 在一个长度为n的数组里的所有数字都在0到n-1的范围内。 数组中某些数字是重复的，但不知道有几个数字是重复的。也不知道每个数字重复几次。请找出数组中任意一个重复的数字。 例如，如果输入长度为7的数组{2,3,1,0,2,5,3}，那么对应的输出是第一个重复的数字2。
+
+参考代码：
+
+```java
+     /**
+     * @param numbers     an array of integers
+     * @param length      the length of array numbers
+     * @param duplication (Output) the duplicated number in the array number,length of duplication array is 1,so using duplication[0] = ? in implementation;
+     * @return true if the input is valid, and there are some duplications in the array number otherwise false
+     */
+    public boolean duplicate(int numbers[],int length,int [] duplication) {
+    StringBuffer sb = new StringBuffer(); 
+        for(int i = 0; i < length; i++){
+                sb.append(numbers[i] + "");
+            }
+        for(int j = 0; j < length; j++){
+            if(sb.indexOf(numbers[j]+"") != sb.lastIndexOf(numbers[j]+"")){
+                duplication[0] = numbers[j];
+                return true;
+            }
+        }
+        return false;
+    }
+```
+
+运行效率
+
+```
+运行时间：15ms
+占用内存：9680k
+```
+
+### 构建乘积数组
+
+[牛客网链接](https://www.nowcoder.com/practice/94a4d381a68b47b7a8bed86f2975db46?tpId=13&tqId=11204&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+题目描述：
+
+> 给定一个数组A[0,1,...,n-1],请构建一个数组B[0,1,...,n-1],其中B中的元素 $B[i]=A[0]*A[1]*...*A[i-1]*A[i+1]*...*A[n-1]$ 。不能使用除法。	
+
+参考代码：
+
+```java
+code
+```
+
+运行效率
+
+```
+
+```
+

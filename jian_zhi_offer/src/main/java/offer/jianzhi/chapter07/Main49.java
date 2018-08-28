@@ -1,15 +1,15 @@
-package offer.jianzhi.chapter06;
+package offer.jianzhi.chapter07;
 
 import java.io.StringReader;
 import java.util.Scanner;
 
 /**
- * 把字符串转换成整数
+ * 案例一：（面试题49）把字符串转换成整数
  *
  * @author jhZhang
  * @date 2018/8/26
  */
-public class Main47_01 {
+public class Main49 {
     static int StrToInt(String str) {
         if (str == null || str.length() <= 0) {
             return 0;
@@ -41,5 +41,6 @@ public class Main47_01 {
         while (sc.hasNext()) {
             System.out.println(StrToInt(sc.next()));
         }
+        System.out.println(String.valueOf(Integer.MAX_VALUE));
     }
 }
