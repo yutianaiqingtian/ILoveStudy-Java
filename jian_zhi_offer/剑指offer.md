@@ -1392,9 +1392,6 @@ PS：为啥是最低，因为如果两个结点在同一个树里面，只要不
 占用内存：9420k
 ```
 
-
-### 表示数值的字符串
-
 ### 表示数值的字符串
 
 [牛客网链接](https://www.nowcoder.com/practice/6f8c901d091949a5837e24bb82a731f2?tpId=13&tqId=11206&tPage=3&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
@@ -1492,4 +1489,51 @@ PS：为啥是最低，因为如果两个结点在同一个树里面，只要不
 ```
 运行时间：20ms
 占用内存：8984k
+```
+
+### 字符流中第一个不重复的字符
+
+[牛客网链接](https://www.nowcoder.com/practice/00de97733b8e4f97a3fb5c680ee10720?tpId=13&tqId=11207&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+题目描述：
+
+> 请实现一个函数用来找出字符流中第一个只出现一次的字符。例如，当从字符流中只读出前两个字符"go"时，第一个只出现一次的字符是"g"。当从该字符流中读出前六个字符“google"时，第一个只出现一次的字符是"l"。如果当前字符流没有存在出现一次的字符，返回#字符。
+
+解题思路：
+
+1. 使用一个数组来存储数组出现的次数
+2. firstChar 来表明第一个访问的数组
+
+参考代码：
+
+```java
+    int[] cnts = new int[256];
+    char firtChar = '#';
+    //Insert one char from stringstream
+    public void Insert(char ch) {
+        if (firtChar == ch) {
+            firtChar = '#';
+        }
+        cnts[ch] += 1;
+    }
+
+    //return the first appearence once char in current stringstream
+    public char FirstAppearingOnce() {
+        if (firtChar == '#') {
+            for (int i = 0; i < cnts.length; i++) {
+                if (cnts[i] == 1) {
+                    firtChar = (char) i;
+                    break;
+                }
+            }
+        }
+        return firtChar;
+    }
+```
+
+运行效率
+
+```
+运行时间：18ms
+占用内存：9488k
 ```
