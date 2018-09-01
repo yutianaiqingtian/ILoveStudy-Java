@@ -1393,3 +1393,103 @@ PS：为啥是最低，因为如果两个结点在同一个树里面，只要不
 ```
 
 
+### 表示数值的字符串
+
+### 表示数值的字符串
+
+[牛客网链接](https://www.nowcoder.com/practice/6f8c901d091949a5837e24bb82a731f2?tpId=13&tqId=11206&tPage=3&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+题目描述：
+
+> 请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。例如，字符串"+100","5e2","-123","3.1416"和"-1E-16"都表示数值。 但是"12e","1a3.14","1.2.3","+-5"和"12e+4.3"都不是。
+
+参考代码：
+
+```java
+    /**
+     * 符合模式串为 [符号]整数数字[小数点及小数点数字部分][e|E [符号]指数数字部分]
+     * <p>
+     * [sign]integral-digits[.[fractional-digits][e|E[sign]exponential-digits] 其中[]表示可选部分
+     * </p>
+     *
+     * @param str 输入的字符串
+     */
+    public boolean isNumeric(char[] str) {
+        if (str == null || str.length == 0) {
+            return false;
+        }
+        int[] index = new int[1];
+
+        // ① 第一个符位
+        if (str[0] == '+' || str[0] == '-') {
+            index[0] += 1;
+            if (str.length == 1) {
+                return false;
+            }
+        }
+
+        scanDigits(str, index);
+        boolean numeric = true;
+
+        if (index[0] != str.length) {
+            if (str[index[0]] == '.') {
+                index[0] += 1;
+                scanDigits(str, index);
+                if (index[0] < str.length && (str[index[0]] == 'e' || str[index[0]] == 'E')) {
+                    numeric = isExponential(str, index);
+                }
+            } else if (index[0] < str.length && (str[index[0]] == 'e' || str[index[0]] == 'E')) {
+                numeric = isExponential(str, index);
+            } else {
+                numeric = false;
+            }
+        }
+
+        return numeric && index[0] == str.length;
+    }
+
+    /**
+     * @return 扫描数字字母
+     */
+    void scanDigits(char[] str, int[] i) {
+        if (i[0] > str.length - 1) {
+            return;
+        }
+        while (i[0] <= str.length - 1 && str[i[0]] >= '0' && str[i[0]] <= '9') {
+            i[0] += 1;
+        }
+    }
+
+    /**
+     * @param str 输入的字符串
+     * @param i   表示起始扫描的位置
+     * @return 匹配科学计数法的结尾部分
+     */
+    boolean isExponential(char[] str, int[] i) {
+        if (i[0] > str.length - 1 || i[0] < 0) {
+            return false;
+        }
+        if (str[i[0]] != 'E' && str[i[0]] != 'e') {
+            return false;
+        }
+        i[0] += 1;
+        if (i[0] == str.length) {
+            return false;
+        }
+        if (str[i[0]] == '+' || str[i[0]] == '-') {
+            i[0] += 1;
+        }
+        if (i[0] > str.length - 1) {
+            return false;
+        }
+        scanDigits(str, i);
+        return i[0] == str.length ? true : false;
+    }
+```
+
+运行效率
+
+```
+运行时间：20ms
+占用内存：8984k
+```
