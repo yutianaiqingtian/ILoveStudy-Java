@@ -1537,3 +1537,99 @@ PS：为啥是最低，因为如果两个结点在同一个树里面，只要不
 运行时间：18ms
 占用内存：9488k
 ```
+
+### 链表中环的入口结点
+
+[牛客网链接](https://www.nowcoder.com/practice/253d2c59ec3e4bc68da16833f79a38e4?tpId=13&tqId=11208&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+题目描述：
+
+> 给一个链表，若其中包含环，请找出该链表的环的入口结点，否则，输出null。
+
+解题思路：
+
+将所有的结点放到set集合中，第一次出现重复的结点就是我们链表的入口结点。
+
+参考代码：
+
+```java
+    public ListNode EntryNodeOfLoop(ListNode pHead) {
+        Set<ListNode> sets = new HashSet<>();
+        while (pHead != null) {
+            if (sets.contains(pHead)) {
+                return pHead;
+            } else {
+                sets.add(pHead);
+            }
+            pHead = pHead.next;
+        }
+        return null;
+    }
+```
+
+还有的思路就是不使用额外的存储空间。
+
+1. 先求出环形链表中的环形长度。可参考前面的面试题 “如何判断一个链表有环”，求出环的大小为 k。
+2. 同样的定义两个指针 p1 和 p2 两个指针，先让 p1 指针移动 k 步，然后同时的移动 p1 和 p2 指针
+3. 当 p1 和 p2 两个指针相遇的时候，这个相遇的结点就是环的入口结点。
+
+参考代码:
+
+```java
+    public int getAnnularLegth(ListNode pHead) {
+        // 表示不存在环
+        int result = -1;
+        if (pHead == null) {
+            return result;
+        }
+        // 寻找第一个相遇的结点
+        ListNode p1 = pHead, p2 = pHead;
+        do {
+            if (p1.next == null || p2.next == null) {
+                return result;
+            }
+            p1 = p1.next;
+            p2 = p2.next.next;
+        } while (p1 != null && p2 != null && p1 != p2);
+
+        // 第一个结点
+        ListNode sameNode = p1;
+        result = 0;
+        do {
+            p1 = p1.next;
+            result++;
+        } while (p1 != sameNode);
+        return result;
+    }
+
+    public ListNode EntryNodeOfLoop2(ListNode pHead) {
+        int K = getAnnularLegth(pHead);
+        if (K == -1) {
+            return null;
+        }
+
+        ListNode p1 = pHead;
+        while (K > 0) {
+            p1 = p1.next;
+            K--;
+        }
+
+        ListNode p2 = pHead;
+        while (p1 != null && p2 != null && p1 != p2) {
+            p1 = p1.next;
+            p2 = p2.next;
+        }
+        return p1;
+    }
+```
+
+运行效率
+
+```
+运行时间：21ms
+占用内存：9660k
+
+运行时间：13ms
+占用内存：9672k
+```
+
