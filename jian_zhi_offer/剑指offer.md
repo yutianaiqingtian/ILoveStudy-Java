@@ -1633,3 +1633,62 @@ PS：为啥是最低，因为如果两个结点在同一个树里面，只要不
 占用内存：9672k
 ```
 
+### 删除链表中重复的结点
+
+[牛客网链接](https://www.nowcoder.com/practice/fc533c45b73a41b0b44ccba763f866ef?tpId=13&tqId=11209&tPage=3&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+题目描述：
+
+> 在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，重复的结点不保留，返回链表头指针。 例如，链表1->2->3->3->4->4->5 处理后为 1->2->5
+
+解题思路：
+
+1. 每次从一个结点出发，找到该结点下的下一个不同结点。
+2. 从头到尾扫描整个链表
+
+参考代码：
+
+```java
+    public ListNode deleteDuplication(ListNode pHead) {
+        if (pHead == null) {
+            return null;
+        }
+        pHead = getNextDiffNode(pHead);
+        ListNode preNode = pHead;
+        while (preNode != null) {
+            ListNode diffNode = getNextDiffNode(preNode.next);
+            preNode.next = diffNode;
+            preNode = diffNode;
+        }
+
+        return pHead;
+    }
+
+    public ListNode getNextDiffNode(ListNode node) {
+        if (node == null) {
+            return null;
+        }
+        ListNode nextNode = node.next;
+        if (nextNode == null) {
+            return node;
+        } else {
+            if (node.val != nextNode.val) {
+                return node;
+            } else {
+                while (nextNode != null && nextNode.val == node.val) {
+                    nextNode = nextNode.next;
+                }
+                return getNextDiffNode(nextNode);
+            }
+        }
+    }
+```
+
+运行效率
+
+```
+运行时间：18ms
+占用内存：9548k
+```
+
+

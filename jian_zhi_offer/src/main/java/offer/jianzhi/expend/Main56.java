@@ -95,17 +95,3 @@ public class Main56 {
         return p1;
     }
 }
-
-class ListNode {
-    int val;
-    ListNode next = null;
-
-    ListNode(int val) {
-        this.val = val;
-    }
-
-    @Override
-    public String toString() {
-        return val + "→";
-    }
-}
