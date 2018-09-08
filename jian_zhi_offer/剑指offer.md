@@ -423,7 +423,7 @@
 如果我们用**后序遍历**的方式遍历二叉树的每一个结点，在遍历到一个结点之前我们就已经遍历了它的左右子树。只要在遍历每个结点的时候记录它的深度（某一结点的深度等于它到叶节点的路径的长度），我们就可以一边遍历一边判断每个结点是不是平衡的。
 
 ```java
-public class Solution {
+public class offer.alibaba.Main2019_01 {
     public boolean IsBalanced_Solution(TreeNode root) {
         return getDepth(root) != -1;
     }
@@ -1688,7 +1688,152 @@ PS：为啥是最低，因为如果两个结点在同一个树里面，只要不
 
 ```
 运行时间：18ms
-占用内存：9548k
+占用内存
+
+48k
 ```
 
 
+
+
+### 送快递
+
+题目描述：
+
+> 如图，某物流派送员p，需要给a、b、c、d 4个快递点派送包裹，请问派送员需要选择什么的路线，才能完成最短路程的派送。假设如图派送员的起点坐标(0,0)，派送路线只能沿着图中的方格边行驶，每个小格都是正方形，且边长为1，如p到d的距离就是4。随机输入n个派送点坐标，求输出最短派送路线值（从起点开始完成n个点派送并回到起始点的距离）。
+
+![30分钟面试题](剑指offer.image/TB1cUaAdMmTBuNjy1XbXXaMrVXa-1242-844.png)
+
+解题思路：
+
+利用全排列的思想，将所有的点依次的读入，记录每个节点的状态
+
+参考代码：
+
+```java
+public class offer.alibaba.Main2019_01 {
+
+    static Point zero = new Point(0, 0);
+    int min;
+    // 所有的点
+    Point[] points;
+    // 记录总共的次数
+    int count = 0;
+
+    public offer.alibaba.Main2019_01(Point[] points) {
+        this.points = new Point[points.length + 1];
+        System.arraycopy(points, 0, this.points, 1, points.length);
+        this.points[0] = zero;
+        min = Integer.MAX_VALUE;
+    }
+
+    public int getMinLenth() {
+        boolean[] statue = new boolean[points.length];
+        Arrays.fill(statue, true);
+        statue[0] = false;
+        getMinLenth(statue, zero, 0);
+        return min;
+    }
+
+    private void getMinLenth(boolean[] statue, Point pre, int sum) {
+        if (isEnd(statue)) {
+            sum += lenth(pre, zero);
+            if (sum < this.min) {
+                this.min = sum;
+            }
+            System.out.println(this.count++ + "\t" + sum);
+        }
+        for (int i = 1; i < statue.length; i++) {
+            if (statue[i]) {
+                sum += lenth(pre, points[i]);
+                boolean[] newStatus = new boolean[statue.length];
+                System.arraycopy(statue, 0, newStatus, 0, statue.length);
+                newStatus[i] = false;
+                getMinLenth(newStatus, points[i], sum);
+            }
+        }
+    }
+
+    // 递推结束条件
+    boolean isEnd(boolean[] state) {
+        for (boolean b : state) {
+            if (b) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // 计算两个点之间的距离
+    int lenth(Point a, Point b) {
+        return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+    }
+}
+```
+
+模拟的点类，将各个放快递的模拟成点。
+
+```java
+    static class Point {
+        int x;
+        int y;
+
+        public Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+```
+
+运行的主类，模拟数据的输入
+
+```java
+//        String str = "4\n" +
+//                "2,2\n" +
+//                "2,8\n" +
+//                "4,4\n" +
+//                "7,2";
+
+        String str = "3\n" +
+                "2,2\n" +
+                "2,8\n" +
+                "6,6";
+        StringReader sr = new StringReader(str);
+        Scanner sc = new Scanner(sr);
+
+        int M = sc.nextInt();
+        sc.useDelimiter(",|\\n");
+        Point[] points = new Point[M];
+        for (int i = 0; i < M; i++) {
+            points[i] = new Point(sc.nextInt(), sc.nextInt());
+        }
+
+        offer.alibaba.Main2019_01 main2019shixi = new offer.alibaba.Main2019_01(points);
+        System.out.println(main2019shixi.getMinLenth());
+```
+
+
+时间限制: 3S (C/C++以外的语言为: 5 S)   内存限制: 128M (C/C++以外的语言为: 640 M)
+输入:
+```
+4
+2,2
+2,8
+4,4
+7,2
+```
+输出:
+```
+30
+```
+输入范例:
+```
+3
+2,2
+2,8
+6,6
+```
+输出范例:
+```
+28
+```
