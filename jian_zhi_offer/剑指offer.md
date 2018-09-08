@@ -1688,12 +1688,61 @@ PS：为啥是最低，因为如果两个结点在同一个树里面，只要不
 
 ```
 运行时间：18ms
-占用内存
-
-48k
+占用内存：48k
 ```
 
 
+
+### 二叉树的下一个结点
+
+[牛客网链接](https://www.nowcoder.com/practice/9023a0c988684a53960365b889ceaf5e?tpId=13&tqId=11210&tPage=3&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+题目描述：
+
+> 给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。
+
+解题思路：
+
+1. 如果一个结点有右子结点，那么下一个就是该右子结点的最左子结点；
+2. 如果这个结点没有右子结点，且该结点是它父结点的左子结点，那么下一结点就是它自己的父结点；
+3. 如果这个结点没有右子结点，且该结点是它父结点的右子结点，那么它的下一个结点就是父结点，持续向上遍历，直到找到一个是它父结点的左子结点的结点。（说的有点绕，大概就是下图所示。）
+
+![Main58第三种情况图示](剑指offer.image/Main58第三种情况图示.png)
+
+参考代码：
+
+```java
+    public TreeLinkNode GetNext(TreeLinkNode pNode) {
+        if (pNode == null) {
+            return null;
+        }
+        // ① 第一种情况
+        if (pNode.right != null) {
+            pNode = pNode.right;
+            while ((pNode != null && pNode.left != null)) {
+                pNode = pNode.left;
+            }
+            return pNode;
+        }
+
+
+        // ② 第二种情况 和 第三种情况
+        TreeLinkNode pParent = pNode.next;
+        while (pParent != null && pParent.right == pNode) {
+            pNode = pNode.next;
+            pParent = pNode.next;
+        }
+
+        return pParent != null ? pParent : null;
+    }
+```
+
+运行效率
+
+```
+运行时间：39ms
+占用内存：9760k
+```
 
 
 ### 送快递
