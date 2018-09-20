@@ -1786,6 +1786,130 @@ PS：为啥是最低，因为如果两个结点在同一个树里面，只要不
 占用内存：9388k
 ```
 
+### 把二叉树打印成多行
+
+[牛客网链接](https://www.nowcoder.com/practice/445c44d982d04483b04a54f298796288?tpId=13&tqId=11213&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+题目描述：
+
+> 从上到下按层打印二叉树，同一层结点从左至右输出。每一层输出一行。
+
+解题思路：
+
+1. 按行打印二叉树，思想肯定还是利用队列来保持输出顺序
+2. 重点就在于采用 nextLevel 和 toBePrinted 两个元素来记录是否该换行啦
+3. nextLevel 表示下一行需要打印的元素个数，toBePrinted 表示当前行还有多少个元素需要打印。
+
+参考代码：
+
+```java
+     ArrayList<ArrayList<Integer>> Print(TreeNode pRoot) {
+        ArrayList<ArrayList<Integer>> lists = new ArrayList();
+        if (pRoot == null) {
+            return lists;
+        }
+        LinkedList<TreeNode> queue = new LinkedList<>();
+
+        ArrayList<Integer> sublists = new ArrayList();
+        queue.add(pRoot);
+        // 下一层需要打印的结点数
+        int nextLevel = 0;
+        // 当前层未打印完的结点数
+        int toBePrinted = 1;
+
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.pop();
+            sublists.add(node.val);
+            --toBePrinted;
+
+            if (node.left != null) {
+                queue.add(node.left);
+                nextLevel++;
+            }
+            if (node.right != null) {
+                queue.add(node.right);
+                nextLevel++;
+            }
+
+            if (toBePrinted == 0) {
+                lists.add(sublists);
+                sublists = new ArrayList();
+                toBePrinted = nextLevel;
+                nextLevel = 0;
+            }
+        }
+        return lists;
+    }
+```
+
+### 按之字形顺序打印二叉树
+
+[牛客网链接](https://www.nowcoder.com/practice/91b69814117f4e8097390d107d2efbe0?tpId=13&tqId=11212&tPage=3&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+题目描述：
+
+> 请实现一个函数按照之字形打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右至左的顺序打印，第三行按照从左到右的顺序打印，其他行以此类推。
+
+解题思路：
+
+1. 按之字型顺序打印二叉树需要两个栈；
+2. 在打印某一行的结点时，把下一层的结点保存到响应的栈中。
+3. 如果打印的层数是奇数层，则先保存左结点，再保存右结点，否则的话先右结点，再左结点。
+
+参考代码：
+
+```java
+    public ArrayList<ArrayList<Integer>> Print(TreeNode pRoot) {
+        ArrayList<ArrayList<Integer>> results = new ArrayList<>();
+        if (pRoot == null) {
+            return results;
+        }
+
+        Stack<TreeNode> stack1 = new Stack<>();
+        Stack<TreeNode> stack2 = new Stack<>();
+        stack1.add(pRoot);
+
+        // 转换标记
+        boolean flag = true;
+
+        ArrayList<Integer> subList = new ArrayList<>();
+
+        while (!stack1.isEmpty()) {
+            TreeNode node = stack1.pop();
+            subList.add(node.val);
+
+            if (flag) {
+                if (node.left != null) {
+                    stack2.add(node.left);
+                }
+                if (node.right != null) {
+                    stack2.add(node.right);
+                }
+            } else {
+                if (node.right != null) {
+                    stack2.add(node.right);
+                }
+                if (node.left != null) {
+                    stack2.add(node.left);
+                }
+            }
+
+            if (stack1.isEmpty()) {
+                Stack stack = stack1;
+                stack1 = stack2;
+                stack2 = stack;
+                results.add(subList);
+                subList = new ArrayList<>();
+                flag = !flag;
+            }
+        }
+        return results;
+    }
+
+```
+
+
+
 ### 送快递
 
 题目描述：
