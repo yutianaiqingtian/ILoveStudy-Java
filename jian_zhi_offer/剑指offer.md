@@ -2030,6 +2030,88 @@ PS：为啥是最低，因为如果两个结点在同一个树里面，只要不
     }
 ```
 
+### 数据流中的中位数
+
+[牛客网链接](https://www.nowcoder.com/practice/9be0172896bd43948f8a32fb954e1be1?tpId=13&tqId=11216&rp=4&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+题目描述：
+
+> 如何得到一个数据流中的中位数？如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。我们使用Insert()方法读取数据流，使用GetMedian()方法获取当前读取数据的中位数。
+
+解题思路：
+
+需要完成两个操作，一个是往数据结构中插入数据流中的数据，一个是查找该数据结构中的中位数
+
+|数据结构|插入的时间效率|得到中位数的时间效率|
+|---|:---:|:---:|
+|没有排序的数组|O(1)|O(n)|
+|排序的数组|O(n)|O(1)|
+|排序的链表|O(n)|O(1)|
+|二叉搜索树|平均O(log(n)，最差O(n))|平均O(logn)，最差O(n)|
+|AVL数|O(log(n))|O(1)|
+|最大堆和最小堆|O(log(n))|O(1)|
+
+**二叉搜索树**
+
+二叉搜索树可以把插入新数据的平均复杂度降低到$O(logn)$。 但是当二叉搜索数极度的不平衡的从而看起来像一个排序的链表时，插入新数据的复杂度仍然为$O(n)$。
+
+**平衡的二叉搜索树**
+
+也即是 AVL 数。把平衡因子改成左右子树的高度差。
+
+**最大堆和最小堆**
+
+整个数据可以看成被中间的一个或者两个数据分成左右两小段，位于左边容器的数据比位于右边容器的数据小。将左边用最大堆来实现，右边用最小堆来实现。
+
+实现的一些细节：
+
+1. 保证数据的平均分配到两个堆中，可以在偶数时，把数据插入到最小堆中，奇数时，插入到最大堆中。
+2. 保证最大堆（左边）中的元素都比最小堆（右边）中的元素小。新元素如果插入到最大堆中，则可以将最大堆中的元素取出，然后插入到最小堆中。插入完之后，再从最小堆中取出最小的元素，插回到最大堆元素之中。新元素插入最小堆中，此过程类似。
+
+
+参考代码：
+
+```java
+    int count;
+    PriorityQueue<Integer> minHeap = new PriorityQueue<Integer>();
+    //PriorityQueue默认是小顶堆，实现大顶堆，需要反转默认排序器
+    PriorityQueue<Integer> maxHeap = new PriorityQueue<>(11, Comparator.reverseOrder());
+
+    public void Insert(Integer num) {
+        count++;
+        // 判断偶数的高效写法
+        if ((count & 1) == 0) {
+            if (!maxHeap.isEmpty() && num < maxHeap.peek()) {
+                maxHeap.offer(num);
+                num = maxHeap.poll();
+            }
+            minHeap.offer(num);
+        } else {
+            if (!minHeap.isEmpty() && num > minHeap.peek()) {
+                minHeap.offer(num);
+                num = minHeap.poll();
+            }
+            maxHeap.offer(num);
+        }
+    }
+
+    public Double GetMedian() {
+        if (count == 0) {
+            throw new RuntimeException("no available number!");
+        }
+        double result;
+        //总数为奇数时，大顶堆堆顶就是中位数
+        if ((count & 1) == 1) {
+            result = maxHeap.peek();
+        } else {
+            result = (minHeap.peek() + maxHeap.peek()) / 2.0;
+        }
+        return result;
+    }
+```
+PS:Java的PriorityQueue 是从JDK1.5开始提供的新的数据结构接口，默认内部是自然排序，结果为小顶堆，也可以自定义排序器，比如下面反转比较，完成大顶堆。
+
+
 
 ### 送快递
 
