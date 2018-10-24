@@ -1994,6 +1994,43 @@ PS：为啥是最低，因为如果两个结点在同一个树里面，只要不
     }
 ```
 
+### 二叉搜索树的第K个结点
+
+[牛客网链接](https://www.nowcoder.com/practice/ef068f602dde4d28aab2b210e859150a?tpId=13&tqId=11215&rp=4&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+题目描述：
+
+> 给定一棵二叉搜索树，请找出其中的第k小的结点。例如， （5，3，7，2，4，6，8）    中，按结点数值大小顺序第三小结点的值为4。
+
+解题思路：
+
+如果按照中序遍历的顺序遍历一颗二叉搜索树，遍历序列的数值是递增排序的
+
+参考代码：
+
+```java
+    int index = 0; //计数器
+    TreeNode KthNode(TreeNode root, int k) {
+        //中序遍历寻找第k个
+        if (root != null) {
+            TreeNode node = KthNode(root.left, k);
+            if (node != null) {
+                return node;
+            }
+            index++;
+            if (index == k) {
+                return root;
+            }
+            node = KthNode(root.right, k);
+            if (node != null) {
+                return node;
+            }
+        }
+        return null;
+    }
+```
+
+
 ### 送快递
 
 题目描述：
