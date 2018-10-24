@@ -126,7 +126,7 @@
 上面是考虑的所有特殊情况。代码实现如下：
 
 ```java
-	private Double PowerWithUnsignedExponent(Double base, int exponent) {
+    private Double PowerWithUnsignedExponent(Double base, int exponent) {
         if (base == 1) {
             return base;
         }
@@ -347,7 +347,7 @@
         int endIndex = getLastNumberOfK(array, 0, array.length, k);
         return endIndex >= startIndex ? endIndex - startIndex + 1 : 0;
     }
-```	
+``` 
 
 该算法所需要的空间效率为：
 
@@ -500,6 +500,8 @@ Tips: ：你可以先考虑这个数组中只有一个数字只出现一次，�
         return indexBit;
     }
 ```
+
+
 
 程序耗时
 
@@ -920,13 +922,13 @@ Arrays.toString(pProbabilities[1 - flag]) = "[0, 0, 0, 0, 1, 4, 10, 20, 35, 56, 
 
 
 ```java
-	public int LastRemaining_Solution(int n, int m) {
-	    if (n == 0)     /* 特殊输入的处理 */
-	        return -1;
-	    if (n == 1)     /* 递归返回条件 */
-	        return 0;
-	    return (LastRemaining_Solution(n - 1, m) + m) % n;
-	}
+    public int LastRemaining_Solution(int n, int m) {
+        if (n == 0)     /* 特殊输入的处理 */
+            return -1;
+        if (n == 1)     /* 递归返回条件 */
+            return 0;
+        return (LastRemaining_Solution(n - 1, m) + m) % n;
+    }
 ```
 
 或者通过循环来进行
@@ -1128,19 +1130,19 @@ Arrays.toString(pProbabilities[1 - flag]) = "[0, 0, 0, 0, 1, 4, 10, 20, 35, 56, 
 PS：为啥是最低，因为如果两个结点在同一个树里面，只要不是根结点，那么根结点都将会是着两个结点的最低祖先。
 
 ```java
-	public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-		if(root==null){
-			return root;
-		}
-		// 如果两个结点值都小于根结点，则往左子树查找
-		if(root.val > p.val && root.val > q.val){
-			return lowestCommonAncestor(root.left, p, q);
-		}
-		if(root.val < p.val && root.val < q.val){
-			return lowestCommonAncestor(root.right, p, q);
-		}
-		return root;
-	}
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root==null){
+            return root;
+        }
+        // 如果两个结点值都小于根结点，则往左子树查找
+        if(root.val > p.val && root.val > q.val){
+            return lowestCommonAncestor(root.left, p, q);
+        }
+        if(root.val < p.val && root.val < q.val){
+            return lowestCommonAncestor(root.right, p, q);
+        }
+        return root;
+    }
 ```
 
 如果这个树就是一个普通的多叉树，但是每个结点保留了指向父结点的指针pParent。那么这道题就转换成了求两个链表的第一个公共子结点。
@@ -1148,48 +1150,48 @@ PS：为啥是最低，因为如果两个结点在同一个树里面，只要不
 ![树中的结点有指向父结点的指针，用虚线箭头表示](剑指offer.image/树中的结点有指向父结点的指针，用虚线箭头表示.png)
 
 ```java
-	public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-		if(root==null){
-			return root;
-		}
-		TreeNode pHead = p;
-		TreeNode qHead = q;
-	
-		// 获得p链表的长度
-		int pLength = 0;
-		while(p!=root){
-			p = p.parent;
-			pLength++;
-		}
-		p = pHead;
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root==null){
+            return root;
+        }
+        TreeNode pHead = p;
+        TreeNode qHead = q;
+    
+        // 获得p链表的长度
+        int pLength = 0;
+        while(p!=root){
+            p = p.parent;
+            pLength++;
+        }
+        p = pHead;
 
-		// 获得q链表的长度
-		int qLength = 0;
-		while(q!=root){
-			q = q.parent;
-			qLength++;
-		}
-		q = qHead;
+        // 获得q链表的长度
+        int qLength = 0;
+        while(q!=root){
+            q = q.parent;
+            qLength++;
+        }
+        q = qHead;
 
-		// 长的链表先走差值步数
-		if(qLength>=pLength){
-			int diff = qLength - pLength;
-			while(diff-- > 0){
-				q = q.parent;
-			}
-		}else{
-			int diff = pLength - qLength;
-			while(diff-- > 0){
-				p = p.parent;
-			}
-		}
+        // 长的链表先走差值步数
+        if(qLength>=pLength){
+            int diff = qLength - pLength;
+            while(diff-- > 0){
+                q = q.parent;
+            }
+        }else{
+            int diff = pLength - qLength;
+            while(diff-- > 0){
+                p = p.parent;
+            }
+        }
 
-		while(p!=null && q!=null && p!=q){
-			p = p.parent;
-			q = q.parent;
-		}
-		return p == q ? p : null;
-	}
+        while(p!=null && q!=null && p!=q){
+            p = p.parent;
+            q = q.parent;
+        }
+        return p == q ? p : null;
+    }
 ```
 
 如果就是普通的树呢？没有任何的其它条件
@@ -1223,13 +1225,13 @@ PS：为啥是最低，因为如果两个结点在同一个树里面，只要不
 参考代码：
 
 ```java
-	public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-	    if (root == null || root == p || root == q)
-	        return root;
-	    TreeNode left = lowestCommonAncestor(root.left, p, q);
-	    TreeNode right = lowestCommonAncestor(root.right, p, q);
-	    return left == null ? right : right == null ? left : root;
-	}
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || root == p || root == q)
+            return root;
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        return left == null ? right : right == null ? left : root;
+    }
 ```
 
 
@@ -1278,7 +1280,7 @@ PS：为啥是最低，因为如果两个结点在同一个树里面，只要不
 
 题目描述：
 
-> 给定一个数组A[0,1,...,n-1],请构建一个数组B[0,1,...,n-1],其中B中的元素 B[i]=A[0]\*A[1]\*...\*A[i-1]\*A[i+1]\*...\*A[n-1] 。不能使用除法。	
+> 给定一个数组A[0,1,...,n-1],请构建一个数组B[0,1,...,n-1],其中B中的元素 B[i]=A[0]\*A[1]\*...\*A[i-1]\*A[i+1]\*...\*A[n-1] 。不能使用除法。 
 
 解题思路：我们可以把 B[i] 看成是左右两部分的乘积。
 
@@ -1908,7 +1910,89 @@ PS：为啥是最低，因为如果两个结点在同一个树里面，只要不
 
 ```
 
+### 序列化二叉树
 
+[牛客网链接](https://www.nowcoder.com/practice/cf7e25aa97c04cc1a68c8f040e71fb84?tpId=13&tqId=11214&tPage=4&rp=4&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+题目描述：
+
+> 请实现两个函数，分别用来序列化和反序列化二叉树
+
+序列化解题思路：
+
+1. 利用先序遍历进行序列化
+2. 每次遇到结点空格使用 `$` 符号来替代
+
+参考代码
+
+```java
+    /*
+    public class TreeNode {
+        int val = 0;
+        TreeNode left = null;
+        TreeNode right = null;
+
+        public TreeNode(int val) {
+            this.val = val;
+
+        }
+    }
+    */
+    /**
+     * 序列化
+     *
+     * @param root
+     * @return
+     */
+    String Serialize(TreeNode root) {
+        if (root == null) {
+            return "$";
+        }
+        String result = String.valueOf(root.val);
+        result += "," + Serialize(root.left);
+        result += "," + Serialize(root.right);
+        return result;
+    }
+```
+
+反序列化解题思路：
+
+1. 将其装换为数组
+2. 利用 index 数组来进行指针操作
+3. 进行数据的模拟
+
+参考代码：
+
+```java
+    /**
+     * 反序列化
+     *
+     * @param str
+     * @return
+     */
+    TreeNode Deserialize(String str) {
+        if (str == null || str.length() <= 0) {
+            return null;
+        }
+        String[] items = str.split(",");
+        int[] index = {0};
+        return Deserialize(items, index);
+    }
+
+    TreeNode Deserialize(String[] chars, int[] index) {
+        if (index[0] >= chars.length || chars[index[0]].equals("$")) {
+            index[0] += 1;
+            return null;
+        }
+
+        int val = Integer.valueOf(chars[index[0]]);
+        TreeNode node = new TreeNode(val);
+        index[0] += 1;
+        node.left = Deserialize(chars, index);
+        node.right = Deserialize(chars, index);
+        return node;
+    }
+```
 
 ### 送快递
 

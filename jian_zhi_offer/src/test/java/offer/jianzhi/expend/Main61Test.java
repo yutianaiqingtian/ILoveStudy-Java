@@ -2,7 +2,7 @@ package offer.jianzhi.expend;
 
 import org.junit.Test;
 
-public class Main60_2Test {
+public class Main61Test {
 
     @Test
     public void print() {
@@ -23,7 +23,7 @@ public class Main60_2Test {
         p3.left = p6;
         p3.right = p7;
 
-        Main60_2 test = new Main60_2();
+        Main61 test = new Main61();
         test.Print(p1);
     }
 }

@@ -1,4 +1,4 @@
-package offer.toutiao;
+package offer.toutiao.one;
 
 import org.junit.Assert;
 import org.junit.Test;
