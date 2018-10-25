@@ -1,16 +1,10 @@
 [TOC]
 
-
-
 ---
-
-# 剑指offer
 
 ### Main5：从尾到头打印链表
 
 ---
-
-2018/5/16 星期三
 
 > **题目描述**：输入个链表的头结点，从尾到头反过来打印出每个结点的值。 
 
@@ -2160,6 +2154,108 @@ PS:Java的PriorityQueue 是从JDK1.5开始提供的新的数据结构接口，�
             ret.add(num[indexDeque.getFirst()]);
         }
         return ret;
+    }
+```
+
+### 矩阵中的路径
+
+[牛客网链接](https://www.nowcoder.com/practice/c61c6999eecb4b8f88a98f66b273a3cc?tpId=13&tqId=11218&rp=4&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+题目描述：
+
+> 链接：https://www.nowcoder.com/questionTerminal/c61c6999eecb4b8f88a98f66b273a3cc
+来源：牛客网
+
+请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一个格子开始，每一步可以在矩阵中向左，向右，向上，向下移动一个格子。如果一条路径经过了矩阵中的某一个格子，则之后不能再次进入这个格子。 例如 a b c e s f c s a d e e 这样的3 X 4 矩阵中包含一条字符串"bcced"的路径，但是矩阵中不包含"abcb"路径，因为字符串的第一个字符b占据了矩阵中的第一行第二个格子之后，路径不能再次进入该格子。
+
+[解题思路](https://www.nowcoder.com/questionTerminal/c61c6999eecb4b8f88a98f66b273a3cc)：
+
+这是一个可以用回朔法解决的典型题。
+
+1. 首先，在矩阵中任选一个格子作为路径的起点。如果路径上的第i个字符不是ch，那么这个格子不可能处在路径上的
+第i个位置。如果路径上的第i个字符正好是ch，那么往相邻的格子寻找路径上的第i+1个字符。除在矩阵边界上的格子之外，其他格子都有4个相邻的格子。
+重复这个过程直到路径上的所有字符都在矩阵中找到相应的位置。
+2. 由于回朔法的递归特性，路径可以被开成一个栈。当在矩阵中定位了路径中前n个字符的位置之后，在与第n个字符对应的格子的周围都没有找到第n+1个
+字符，这个时候只要在路径上回到第n-1个字符，重新定位第n个字符。
+3. 由于路径不能重复进入矩阵的格子，还需要定义和字符矩阵大小一样的布尔值矩阵，用来标识路径是否已经进入每个格子。 当矩阵中坐标为（row,col）的
+格子和路径字符串中相应的字符一样时，从4个相邻的格子(row,col-1),(row-1,col),(row,col+1)以及(row+1,col)中去定位路径字符串中下一个字符
+如果4个相邻的格子都没有匹配字符串中下一个的字符，表明当前路径字符串中字符在矩阵中的定位不正确，我们需要回到前一个，然后重新定位。
+4. 一直重复这个过程，直到路径字符串上所有字符都在矩阵中找到合适的位置
+
+参考代码：
+
+```java
+    public boolean hasPath(char[] matrix, int rows, int cols, char[] str) {
+        boolean[] visited = new boolean[matrix.length];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (searchFromHere(matrix, rows, cols, i, j, 0, str, visited)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean searchFromHere(char[] matrix, int rows, int cols, int r, int c, int index, char[] str, boolean[] visited) {
+        if (r < 0 || r >= rows || c < 0 || c >= cols || matrix[r * cols + c] != str[index] || visited[r * cols + c]) {
+            return false;
+        }
+        if (index == str.length - 1) {
+            return true;
+        }
+        visited[r * cols + c] = true;
+        if (searchFromHere(matrix, rows, cols, r - 1, c, index + 1, str, visited) ||
+                searchFromHere(matrix, rows, cols, r, c - 1, index + 1, str, visited) ||
+                searchFromHere(matrix, rows, cols, r + 1, c, index + 1, str, visited) ||
+                searchFromHere(matrix, rows, cols, r, c + 1, index + 1, str, visited)) {
+            return true;
+        }
+        visited[r * cols + c] = false;
+        return false;
+    }
+```
+
+### 机器人的运动范围
+
+[牛客网链接](https://www.nowcoder.com/practice/6e5207314b5241fb83f2329e89fdecc8?tpId=13&tqId=11219&rp=4&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+题目描述：
+
+> 地上有一个m行和n列的方格。一个机器人从坐标0,0的格子开始移动，每一次只能向左，右，上，下四个方向移动一格，但是不能进入行坐标和列坐标的数位之和大于k的格子。 例如，当k为18时，机器人能够进入方格（35,37），因为3+5+3+7 = 18。但是，它不能进入方格（35,38），因为3+5+3+8 = 19。请问该机器人能够达到多少个格子？
+
+解题思路：
+
+与上面的题目类似，这个方格可以看成是一个$m\timesn$的矩阵。机器人从坐标 (0,0) 开始移动。当它准备进入坐标为 (i,j) 的格子的时，通过检查坐标的**数位和**来判断机器人是否能够进入。如果机器人能够进入，我们接着判断它能够进入四个相邻的格子 (i,j-1)、(i-1,j)、(i,j+1)、(i+1,j)。
+
+利用回溯法的参考代码：
+
+```java
+    public int movingCount(int threshold, int rows, int cols) {
+        boolean[][] visited = new boolean[rows][cols];
+        return countingSteps(threshold, rows, cols, 0, 0, visited);
+    }
+
+    public int countingSteps(int limit, int rows, int cols, int r, int c, boolean[][] visited) {
+        if (r < 0 || r >= rows || c < 0 || c >= cols
+                || visited[r][c] || getDigitSum(r) + getDigitSum(c) > limit) {
+            return 0;
+        }
+        visited[r][c] = true;
+        return countingSteps(limit, rows, cols, r - 1, c, visited)
+                + countingSteps(limit, rows, cols, r, c - 1, visited)
+                + countingSteps(limit, rows, cols, r + 1, c, visited)
+                + countingSteps(limit, rows, cols, r, c + 1, visited)
+                + 1;
+    }
+
+    public int getDigitSum(int t) {
+        int count = 0;
+        while (t != 0) {
+            count += t % 10;
+            t /= 10;
+        }
+        return count;
     }
 ```
 

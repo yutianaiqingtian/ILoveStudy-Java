@@ -26,7 +26,8 @@ public class Main42_1 {
 
     /**
      * 左旋转字符串
-     *3
+     * 3
+     *
      * @param str 原始字符串
      * @param n   旋转的位置
      * @return

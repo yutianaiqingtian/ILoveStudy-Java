@@ -7,16 +7,16 @@ package offer.jianzhi.chapter2;
  * @date 2018/5/18
  */
 public class Main11 {
-public int RectCover(int target) {
-if (target <= 0) {
-return 0;
-}
-int a = 0;
-int b = 1;
-while ((target--) > 0) {
-b = a + b;
-a = b - a;
-}
-return b;
-}
+    public int RectCover(int target) {
+        if (target <= 0) {
+            return 0;
+        }
+        int a = 0;
+        int b = 1;
+        while ((target--) > 0) {
+            b = a + b;
+            a = b - a;
+        }
+        return b;
+    }
 }

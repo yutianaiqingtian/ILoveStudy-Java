@@ -60,11 +60,11 @@ public class Main38 {
     }
 
     public int GetNumberOfK(int[] array, int k) {
-        int startIndex = getFirstNumberOfK(array, 0, array.length-1, k);
+        int startIndex = getFirstNumberOfK(array, 0, array.length - 1, k);
         if (startIndex == -1) {
             return 0;
         }
-        int endIndex = getLastNumberOfK(array, 0, array.length-1, k);
+        int endIndex = getLastNumberOfK(array, 0, array.length - 1, k);
         if (endIndex == -1) {
             return 0;
         }
