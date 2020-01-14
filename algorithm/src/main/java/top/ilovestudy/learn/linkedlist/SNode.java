@@ -1,4 +1,4 @@
-package top.ilovestudy.learn.link;
+package top.ilovestudy.learn.linkedlist;
 
 import lombok.Data;
 

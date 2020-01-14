@@ -1,4 +1,4 @@
-package top.ilovestudy.learn.link;
+package top.ilovestudy.learn.linkedlist;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 @Getter
-public class SingleLink {
+public class SingleLinkedList {
 
   SNode head;
 
-  public SingleLink(SNode head) {
+  public SingleLinkedList(SNode head) {
     addNodeToTailed(head);
   }
 
