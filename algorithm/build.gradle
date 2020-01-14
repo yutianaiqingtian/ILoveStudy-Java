@@ -1,31 +1,7 @@
 plugins {
     id 'idea'
-    id 'java'
 }
 
 group 'top.ilovestudy.learn'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-    maven {
-        url 'http://maven.aliyun.com/nexus/content/groups/public/'
-    }
-}
-
-dependencies {
-    compileOnly "org.projectlombok:lombok:1.18.4"
-    annotationProcessor "org.projectlombok:lombok:1.18.4"
-
-    testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
-}
-
-test {
-    useJUnitPlatform()
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
-}
