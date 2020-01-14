@@ -8,17 +8,17 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 @Getter
-public class SingleLinkedList {
+public class SingleLinkedList<E> {
 
-  SNode head;
+  SNode<E> head;
 
-  public SingleLinkedList(SNode head) {
+  public SingleLinkedList(SNode<E> head) {
     addNodeToTailed(head);
   }
 
   public int size() {
     int length = 0;
-    SNode sNode = head;
+    SNode<E> sNode = head;
     while (sNode != null) {
       length++;
       sNode = sNode.getNext();
@@ -26,11 +26,11 @@ public class SingleLinkedList {
     return length;
   }
 
-  public void addNodeToTailed(SNode sNode) {
+  public void addNodeToTailed(SNode<E> sNode) {
     if (head == null) {
       head = sNode;
     } else {
-      SNode tNode = head;
+      SNode<E> tNode = head;
       while (tNode.getNext() != null) {
         tNode = tNode.getNext();
       }
@@ -38,12 +38,12 @@ public class SingleLinkedList {
     }
   }
 
-  public SNode find(SNode sNode) {
+  public SNode<E> find(SNode<E> sNode) {
     if (head == null) {
       throw new RuntimeException("you are find in a empty list");
     }
 
-    SNode tNode = head;
+    SNode<E> tNode = head;
     while (tNode.getNext() != null) {
       if (tNode.getElement().equals(sNode.getElement())) {
         return tNode;
@@ -53,7 +53,7 @@ public class SingleLinkedList {
     return tNode.getElement().equals(sNode.getElement()) ? tNode : null;
   }
 
-  public void delete(SNode sNode) {
+  public void delete(SNode<E> sNode) {
     if (head == null) {
       throw new RuntimeException("you are try to delete element in a empty list");
     }
@@ -62,7 +62,7 @@ public class SingleLinkedList {
       return;
     }
 
-    SNode tNode = head;
+    SNode<E> tNode = head;
     while (tNode.getNext() != null) {
       if (tNode.getNext().getElement().equals(sNode.getElement())) {
         tNode.setNext(tNode.getNext().getNext());
@@ -74,7 +74,7 @@ public class SingleLinkedList {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    SNode tNode = head;
+    SNode<E> tNode = head;
     while (tNode.getNext() != null) {
       sb.append(tNode.getElement()).append(" -> ");
       tNode = tNode.getNext();

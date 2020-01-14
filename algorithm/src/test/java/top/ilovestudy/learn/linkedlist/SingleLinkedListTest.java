@@ -10,7 +10,7 @@ class SingleLinkedListTest {
   @Test
   void should_add_head_node_when_given_in_empty_list() {
     SNode<Integer> sNode = new SNode<>(2);
-    SingleLinkedList singleLinkedList = new SingleLinkedList();
+    SingleLinkedList<Integer> singleLinkedList = new SingleLinkedList<>();
 
     singleLinkedList.addNodeToTailed(sNode);
 
@@ -21,7 +21,7 @@ class SingleLinkedListTest {
   @Test
   void should_add_tail_node_when_add_a_new_node() {
     // 2->3->4->5
-    SingleLinkedList singleLinkedList = getTestSingleLink();
+    SingleLinkedList<Integer> singleLinkedList = getTestSingleLink();
 
     singleLinkedList.addNodeToTailed(new SNode<>(6));
 
@@ -32,7 +32,7 @@ class SingleLinkedListTest {
   @Test
   void should_find_some_node() {
     // 2->3->4->5
-    SingleLinkedList singleLinkedList = getTestSingleLink();
+    SingleLinkedList<Integer> singleLinkedList = getTestSingleLink();
 
     SNode result = singleLinkedList.find(new SNode<>(3));
 
@@ -41,7 +41,7 @@ class SingleLinkedListTest {
 
   @Test
   void should_throw_exception_when_find_one_node_in_empty_list() {
-    SingleLinkedList singleLinkedList = new SingleLinkedList();
+    SingleLinkedList<Integer> singleLinkedList = new SingleLinkedList<>();
     SNode<Integer> sNode = new SNode<>(2);
 
     assertThrows(RuntimeException.class, () -> singleLinkedList.find(sNode));
@@ -50,7 +50,7 @@ class SingleLinkedListTest {
   @Test
   void should_delete_some_node_when_delete_head_node() {
     // 2->3->4->5
-    SingleLinkedList singleLinkedList = getTestSingleLink();
+    SingleLinkedList<Integer> singleLinkedList = getTestSingleLink();
     System.out.println(singleLinkedList.toString());
 
     singleLinkedList.delete(new SNode<>(2));
@@ -62,7 +62,7 @@ class SingleLinkedListTest {
   @Test
   void should_delete_some_node_when_delete_middle_node() {
     // 2->3->4->5
-    SingleLinkedList singleLinkedList = getTestSingleLink();
+    SingleLinkedList<Integer> singleLinkedList = getTestSingleLink();
 
     singleLinkedList.delete(new SNode<>(4));
 
@@ -74,13 +74,13 @@ class SingleLinkedListTest {
   @Test
   void should_throw_exception_when_delete_node_in_empty_list() {
     // Empty List
-    SingleLinkedList singleLinkedList = new SingleLinkedList();
+    SingleLinkedList<Integer> singleLinkedList = new SingleLinkedList<>();
 
     assertThrows(RuntimeException.class, () -> singleLinkedList.delete(new SNode<>(1)));
   }
 
-  private SingleLinkedList getTestSingleLink() {
-    SingleLinkedList singleLinkedList = new SingleLinkedList(new SNode<>(2));
+  private SingleLinkedList<Integer> getTestSingleLink() {
+    SingleLinkedList<Integer> singleLinkedList = new SingleLinkedList<>(new SNode<>(2));
     singleLinkedList.addNodeToTailed(new SNode<>(3));
     singleLinkedList.addNodeToTailed(new SNode<>(4));
     singleLinkedList.addNodeToTailed(new SNode<>(5));
