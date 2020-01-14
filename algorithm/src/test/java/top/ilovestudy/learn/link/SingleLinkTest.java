@@ -15,7 +15,7 @@ class SingleLinkTest {
     singleLink.addNodeToTailed(sNode);
 
     assertEquals(1, singleLink.size());
-    assertEquals(2, singleLink.getHead().getValue());
+    assertEquals(2, singleLink.getHead().getElement());
   }
 
   @Test
@@ -26,7 +26,7 @@ class SingleLinkTest {
     singleLink.addNodeToTailed(new SNode(6));
 
     assertEquals(5, singleLink.size());
-    assertEquals(6, singleLink.getHead().getNext().getNext().getNext().getNext().getValue());
+    assertEquals(6, singleLink.getHead().getNext().getNext().getNext().getNext().getElement());
   }
 
   @Test
@@ -36,7 +36,7 @@ class SingleLinkTest {
 
     SNode<Integer> result = singleLink.find(new SNode(3));
 
-    assertEquals(3, result.getValue());
+    assertEquals(3, result.getElement());
   }
 
   @Test
@@ -56,7 +56,7 @@ class SingleLinkTest {
     singleLink.delete(new SNode<>(2));
 
     assertEquals(3, singleLink.size());
-    assertEquals(3, singleLink.getHead().getValue());
+    assertEquals(3, singleLink.getHead().getElement());
   }
 
   @Test
@@ -67,8 +67,8 @@ class SingleLinkTest {
     singleLink.delete(new SNode<>(4));
 
     assertEquals(3, singleLink.size());
-    assertEquals(2, singleLink.getHead().getValue());
-    assertEquals(5, singleLink.getHead().getNext().getNext().getValue());
+    assertEquals(2, singleLink.getHead().getElement());
+    assertEquals(5, singleLink.getHead().getNext().getNext().getElement());
   }
 
   @Test

@@ -7,10 +7,10 @@ import lombok.Data;
  */
 @Data
 public class SNode<T> {
-  T value;
+  T element;
   SNode<T> next;
 
-  public SNode(T node) {
-    this.value = node;
+  public SNode(T element) {
+    this.element = element;
   }
 }

@@ -45,26 +45,26 @@ public class SingleLink {
 
     SNode tNode = head;
     while (tNode.getNext() != null) {
-      if (tNode.getValue().equals(sNode.getValue())) {
+      if (tNode.getElement().equals(sNode.getElement())) {
         return tNode;
       }
       tNode = tNode.getNext();
     }
-    return tNode.getValue().equals(sNode.getValue()) ? tNode : null;
+    return tNode.getElement().equals(sNode.getElement()) ? tNode : null;
   }
 
   public void delete(SNode sNode) {
     if (head == null) {
       throw new RuntimeException("you are try to delete element in a empty list");
     }
-    if (head.getValue().equals(sNode.getValue())) {
+    if (head.getElement().equals(sNode.getElement())) {
       this.head = this.head.getNext();
       return;
     }
 
     SNode tNode = head;
     while (tNode.getNext() != null) {
-      if (tNode.getNext().getValue().equals(sNode.getValue())) {
+      if (tNode.getNext().getElement().equals(sNode.getElement())) {
         tNode.setNext(tNode.getNext().getNext());
       }
       tNode = tNode.getNext();
@@ -76,10 +76,10 @@ public class SingleLink {
     StringBuilder sb = new StringBuilder();
     SNode tNode = head;
     while (tNode.getNext() != null) {
-      sb.append(tNode.getValue()).append(" -> ");
+      sb.append(tNode.getElement()).append(" -> ");
       tNode = tNode.getNext();
     }
-    sb.append(tNode.getValue());
+    sb.append(tNode.getElement());
     return sb.toString();
   }
 }
