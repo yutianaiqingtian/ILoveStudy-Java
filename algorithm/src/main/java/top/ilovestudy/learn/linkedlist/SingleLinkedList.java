@@ -71,6 +71,9 @@ public class SingleLinkedList<E> {
     }
   }
 
+  /**
+   * FIXME: 2020-01-15 Use only in acyclic linked lists
+   */
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
