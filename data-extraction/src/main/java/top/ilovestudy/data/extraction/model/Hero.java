@@ -1,10 +1,16 @@
 package top.ilovestudy.data.extraction.model;
 
 import lombok.Data;
+import org.apache.commons.io.FileUtils;
+import top.ilovestudy.data.extraction.CSVFilePageModelPipeline;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.model.OOSpider;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
-import us.codecraft.webmagic.pipeline.JsonFilePageModelPipeline;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * @author jinghui.zhang
@@ -62,9 +68,13 @@ public class Hero {
   @ExtractBy(value = "/html/body/div[2]/div[2]/div[4]/div[2]/text()", notNull = true)
   private String lieZhuan;
 
-  public static void main(String[] args) {
-    OOSpider.create(Site.me().setSleepTime(1000)
-        , new JsonFilePageModelPipeline("./"), Hero.class)
-        .addUrl("https://sgz.ejoy.com/m/station/detail-350659087930767364-376405201398020100").thread(1).run();
+  public static void main(String[] args) throws IOException {
+    List<String> urls = FileUtils.readLines(new File("data-extraction/src/main/resources/heroUrls"));
+    Spider spider = OOSpider.create(Site.me().setSleepTime(1000), new CSVFilePageModelPipeline(), Hero.class)
+        .addUrl("https://sgz.ejoy.com/m/station/detail-350659087930767364-376405201398020100");
+    for (String url : urls) {
+      spider.addUrl(url);
+    }
+    spider.thread(1).run();
   }
 }
