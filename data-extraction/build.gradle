@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+}
+
+version 'unspecified'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'us.codecraft:webmagic-core:0.7.3'
+    compile 'us.codecraft:webmagic-extension:0.7.3'
+}
